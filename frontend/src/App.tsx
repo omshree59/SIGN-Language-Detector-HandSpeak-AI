@@ -12,6 +12,8 @@ export default function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const handLandmarkerRef = useRef<HandLandmarker | null>(null);
+const animationFrameRef = useRef<number | null>(null);
 
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [currentSign, setCurrentSign] = useState<string>('-');
@@ -24,6 +26,7 @@ export default function App() {
   const stableCharRef = useRef<string>('');
   const [uiHoldCount, setUiHoldCount] = useState<number>(0);
   const HOLD_THRESHOLD = 15; // Requires ~0.5 seconds of holding the exact same sign
+  const isCameraActiveRef = useRef(true);
 
   useEffect(() => {
     // Connect to Python Backend natively (removes the buggy library dependency)
@@ -59,15 +62,13 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    let handLandmarker: HandLandmarker;
-    let animationFrameId: number;
-
+  
     const initializeMediaPipe = async () => {
       const vision = await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
       );
-      handLandmarker = await HandLandmarker.createFromOptions(vision, {
+      handLandmarkerRef.current =
+await HandLandmarker.createFromOptions(vision, {
         baseOptions: {
           modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
           delegate: "GPU"
@@ -79,25 +80,47 @@ export default function App() {
       startCamera();
     };
 
-    const startCamera = async () => {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.addEventListener("loadeddata", predictWebcam);
-        }
+const startCamera = async () => {
+  isCameraActiveRef.current = true;
+  setIsCameraActive(true);
+
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+
+      await videoRef.current.play();
+
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
-    };
+
+      predictWebcam();
+    }
+  }
+};
 
     const predictWebcam = async () => {
-      if (!videoRef.current || !canvasRef.current || !handLandmarker) return;
+if (
+  !isCameraActiveRef.current ||
+  !videoRef.current ||
+  !canvasRef.current ||
+  !handLandmarkerRef.current
+) {
+  return;
+}
       
       const video = videoRef.current;
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       
       let startTimeMs = performance.now();
-      const results = handLandmarker.detectForVideo(video, startTimeMs);
+      const results =
+handLandmarkerRef.current.detectForVideo(
+    video,
+    startTimeMs
+);  
       
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
       
@@ -137,39 +160,43 @@ export default function App() {
         }
       }
       
-      animationFrameId = requestAnimationFrame(predictWebcam);
+      animationFrameRef.current =
+requestAnimationFrame(predictWebcam);
     };
+  useEffect(() => {
+  initializeMediaPipe();
 
-    initializeMediaPipe();
+  return () => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
 
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      if (handLandmarker) handLandmarker.close();
-    };
-  }, []);
+    handLandmarkerRef.current?.close();
+  };
+}, []);
 
-  const toggleCamera = () => {
-    if (isCameraActive) {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        stream.getTracks().forEach(track => track.stop());
-        videoRef.current.srcObject = null;
-      }
-      setIsCameraActive(false);
-      setCurrentSign('-');
-      setConfidence(0);
-    } else {
-      setIsCameraActive(true);
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        });
+
+const toggleCamera = async () => {
+  if (isCameraActive) {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
     }
-  };
 
+
+    isCameraActiveRef.current = false;
+setIsCameraActive(false);
+    setCurrentSign("-");
+    setConfidence(0);
+  } else {
+  await startCamera();
+}
+};
   return (
   <div
     style={{

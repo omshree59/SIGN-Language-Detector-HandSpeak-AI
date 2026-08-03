@@ -92,7 +92,7 @@ export default function Footer() {
           whileHover={{
             scale: 1.08,
           }}
-          href="https://github.com/yourusername"
+          href="https://github.com/omshree59"
           target="_blank"
           rel="noreferrer"
           style={{
