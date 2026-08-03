@@ -1,4 +1,12 @@
 import { ReactNode } from "react";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Area,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { motion } from "framer-motion";
 import {
   Brain,
@@ -16,6 +24,7 @@ import {
 interface PredictionPanelProps {
   currentSign: string;
   confidence: number;
+  confidenceHistory: number[];
   isModelLoaded: boolean;
   isCameraActive: boolean;
 }
@@ -23,6 +32,7 @@ interface PredictionPanelProps {
 export default function PredictionPanel({
   currentSign,
   confidence,
+  confidenceHistory,
   isModelLoaded,
   isCameraActive,
 }: PredictionPanelProps) {
@@ -41,6 +51,23 @@ export default function PredictionPanel({
       : confidence >= 70
       ? "Good"
       : "Low";
+
+      const chartData = confidenceHistory.map((value, index) => ({
+  index,
+  confidence: value,
+}));
+
+const healthScore = !isCameraActive
+  ? 0
+  : Math.round(
+      Math.min(
+        100,
+        confidence * 0.55 +
+          (isModelLoaded ? 20 : 0) +
+          (confidenceHistory.length > 10 ? 15 : 5) +
+          (confidence > 90 ? 10 : confidence > 75 ? 5 : 0)
+      )
+    );
 
   return (
     <motion.div
@@ -392,7 +419,7 @@ export default function PredictionPanel({
               fontWeight: 700,
             }}
           >
-            98%
+            {healthScore}%
           </span>
         </div>
 
@@ -406,7 +433,7 @@ export default function PredictionPanel({
         >
           <motion.div
             animate={{
-              width: "98%",
+              width: `${healthScore}%`,
             }}
             transition={{
               duration: 1,
@@ -427,9 +454,17 @@ export default function PredictionPanel({
             lineHeight: 1.6,
           }}
         >
-          All AI services are operating normally. MediaPipe,
-          FastAPI, PyTorch model and WebSocket connection are
-          active.
+        {
+  !isCameraActive
+    ? "Camera is offline. AI monitoring has been paused."
+    : healthScore >= 95
+    ? "Excellent system stability. All AI components are operating optimally."
+    : healthScore >= 85
+    ? "System is healthy with consistent real-time predictions."
+    : healthScore >= 70
+    ? "AI is functioning normally. Minor confidence fluctuations detected."
+    : "Prediction quality has decreased. Try improving hand visibility."
+}
         </p>
       </div>
       
@@ -479,33 +514,42 @@ export default function PredictionPanel({
             overflow: "hidden",
           }}
         >
-          <svg
-            width="100%"
-            height="170"
-            viewBox="0 0 500 170"
-            style={{ opacity: isCameraActive ? 1 : 0.2 }}
-          >
-            <polyline
-              fill="none"
-              stroke="#3B82F6"
-              strokeWidth="4"
-              points="
-              0,120
-              40,110
-              80,100
-              120,90
-              160,80
-              200,88
-              240,76
-              280,60
-              320,55
-              360,45
-              400,35
-              440,28
-              500,22
-              "
-            />
-          </svg>
+<ResponsiveContainer width="100%" height={170}>
+  <LineChart data={chartData}>
+    <defs>
+      <linearGradient id="confidenceFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.45} />
+        <stop offset="100%" stopColor="#3B82F6" stopOpacity={0} />
+      </linearGradient>
+    </defs>
+
+    <XAxis hide />
+    <YAxis hide domain={[0, 100]} />
+
+    <Area
+      type="monotone"
+      dataKey="confidence"
+      stroke="none"
+      fill="url(#confidenceFill)"
+    />
+
+    <Line
+      type="monotone"
+      dataKey="confidence"
+      stroke="#3B82F6"
+      strokeWidth={4}
+      dot={false}
+      activeDot={{
+        r: 6,
+        fill: "#60A5FA",
+        stroke: "#fff",
+        strokeWidth: 2,
+      }}
+      isAnimationActive
+      animationDuration={250}
+    />
+  </LineChart>
+</ResponsiveContainer>
           <div
             style={{
               position: "absolute",

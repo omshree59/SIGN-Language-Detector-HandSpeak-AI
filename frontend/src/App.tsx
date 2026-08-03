@@ -6,6 +6,8 @@ import PredictionPanel from "./components/PredictionPanel";
 import SentencePanel from "./components/SentencePanel";
 import Footer from "./components/Footer";
 
+
+
 const WS_URL = 'ws://127.0.0.1:8000/ws/predict';
 
 export default function App() {
@@ -18,6 +20,7 @@ const animationFrameRef = useRef<number | null>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [currentSign, setCurrentSign] = useState<string>('-');
   const [confidence, setConfidence] = useState<number>(0);
+  const [confidenceHistory, setConfidenceHistory] = useState<number[]>([]);
   const [sentence, setSentence] = useState<string>('');
   const [isCameraActive, setIsCameraActive] = useState<boolean>(true);
 
@@ -39,6 +42,10 @@ const animationFrameRef = useRef<number | null>(null);
       if (data.predicted_character) {
         setCurrentSign(data.predicted_character);
         setConfidence(data.confidence);
+        setConfidenceHistory((prev) => {
+  const updated = [...prev, data.confidence];
+  return updated.slice(-40); // Keep only last 40 values
+});
         
         // Hold Stabilizer Logic
         if (data.predicted_character === stableCharRef.current && data.confidence > 80) {
@@ -248,9 +255,10 @@ setIsCameraActive(false);
         <PredictionPanel
           currentSign={currentSign}
           confidence={confidence}
+          confidenceHistory={confidenceHistory}
           isModelLoaded={isModelLoaded}
           isCameraActive={isCameraActive}
-        />
+/>
       </div>
 
       {/* Footer */}
