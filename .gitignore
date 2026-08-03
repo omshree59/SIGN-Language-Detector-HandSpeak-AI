@@ -1,0 +1,42 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Python
+backend/__pycache__/
+backend/.venv/
+backend/venv/
+
+# Python cache
+*.pyc
+
+# Model files (optional if very large)
+backend/models/*.pth
+backend/models/*.pt
+backend/ml/*.pth
+backend/ml/*.pt
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+# Ignore training dataset
+backend/ml/data/
+
+# Ignore trained models
+backend/ml/*.pth
+backend/ml/*.pt
+
+# Ignore Python cache
+backend/__pycache__/
+backend/.venv/
+backend/venv/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
