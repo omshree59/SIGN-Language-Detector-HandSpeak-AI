@@ -127,7 +127,9 @@ const startCamera = async () => {
   setIsCameraActive(true);
 
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator.mediaDevices.getUserMedia({ 
+      video: { width: { ideal: 1920 }, height: { ideal: 1080 } } 
+    });
 
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
@@ -326,6 +328,7 @@ setIsCameraActive(false);
             uiHoldCount={uiHoldCount}
             HOLD_THRESHOLD={HOLD_THRESHOLD}
             confidence={confidence}
+            isCameraActive={isCameraActive}
           />
 
         </div>

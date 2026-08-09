@@ -22,6 +22,7 @@ interface SentencePanelProps {
   uiHoldCount: number;
   HOLD_THRESHOLD: number;
   confidence: number;
+  isCameraActive: boolean;
 }
 
 export default function SentencePanel({
@@ -30,6 +31,7 @@ export default function SentencePanel({
   uiHoldCount,
   HOLD_THRESHOLD,
   confidence,
+  isCameraActive,
 }: SentencePanelProps) {
   const characters = sentence.length;
 
@@ -85,7 +87,7 @@ export default function SentencePanel({
 
         <motion.div
           animate={{
-            scale: [1, 1.05, 1],
+            scale: isCameraActive ? [1, 1.05, 1] : 1,
           }}
           transition={{
             repeat: Infinity,
@@ -97,14 +99,14 @@ export default function SentencePanel({
             alignItems: "center",
             padding: "10px 18px",
             borderRadius: 999,
-            background: "rgba(249,115,22,0.15)",
-            border: "1px solid rgba(249,115,22,0.4)",
-            color: "#FB923C",
+            background: isCameraActive ? "rgba(249,115,22,0.15)" : "rgba(100,116,139,0.15)",
+            border: isCameraActive ? "1px solid rgba(249,115,22,0.4)" : "1px solid rgba(100,116,139,0.4)",
+            color: isCameraActive ? "#FB923C" : "#64748B",
             fontWeight: 700,
           }}
         >
           <Sparkles size={18} />
-          LIVE
+          {isCameraActive ? "LIVE" : "PAUSED"}
         </motion.div>
       </div>
 
@@ -280,8 +282,8 @@ speechSynthesis.speak(utterance);
 
         <MiniInfoCard
           title="Status"
-          value="LIVE"
-          color="#22C55E"
+          value={isCameraActive ? "LIVE" : "PAUSED"}
+          color={isCameraActive ? "#22C55E" : "#64748B"}
         />
       </div>
             {/* ================= HOLD PROGRESS ================= */}
@@ -372,14 +374,14 @@ boxShadow: "0 7px 20px rgba(0,0,0,.2)",
       >
         <StatusCard
           title="Translation"
-          value="Running"
-          color="#22C55E"
+          value={isCameraActive ? "Running" : "Paused"}
+          color={isCameraActive ? "#22C55E" : "#64748B"}
         />
 
         <StatusCard
           title="Gesture"
-          value="Detected"
-          color="#3B82F6"
+          value={!isCameraActive ? "Idle" : (confidence > 75 ? "Detected" : "Searching")}
+          color={!isCameraActive ? "#64748B" : (confidence > 75 ? "#3B82F6" : "#F59E0B")}
         />
 
         <StatusCard

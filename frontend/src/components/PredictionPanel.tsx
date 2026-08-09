@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect, useRef } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -27,6 +27,7 @@ interface PredictionPanelProps {
   confidenceHistory: number[];
   isModelLoaded: boolean;
   isCameraActive: boolean;
+  backendStatus?: string;
 }
 
 export default function PredictionPanel({
@@ -37,6 +38,42 @@ export default function PredictionPanel({
   isCameraActive,
   backendStatus,
 }: PredictionPanelProps) {
+  const statsRef = useRef({ total: 0, sum: 0, best: 0 });
+  const [stats, setStats] = useState({ total: 0, avg: 0, best: 0 });
+  const [sessionSeconds, setSessionSeconds] = useState(0);
+
+  // Timer effect
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (isCameraActive) {
+      interval = setInterval(() => setSessionSeconds((s) => s + 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isCameraActive]);
+
+  // Track prediction stats whenever confidenceHistory updates
+  useEffect(() => {
+    if (isCameraActive && confidenceHistory.length > 0) {
+      const latest = confidenceHistory[confidenceHistory.length - 1];
+      statsRef.current.total += 1;
+      statsRef.current.sum += latest;
+      if (latest > statsRef.current.best) {
+        statsRef.current.best = latest;
+      }
+      setStats({
+        total: statsRef.current.total,
+        avg: statsRef.current.sum / statsRef.current.total,
+        best: statsRef.current.best,
+      });
+    }
+  }, [confidenceHistory, isCameraActive]);
+
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60).toString().padStart(2, "0");
+    const s = (secs % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
   const confidenceColor =
     confidence >= 90
       ? "#10B981"
@@ -594,10 +631,10 @@ boxShadow: "0 8px 22px rgba(0,0,0,.2)",
           gap: 16,
         }}
       >
-        <MiniCard title="Predictions" value={isCameraActive ? "243" : "0"} />
-        <MiniCard title="Average Confidence" value={isCameraActive ? "97.8%" : "0%"} />
-        <MiniCard title="Best Prediction" value={isCameraActive ? "99.9%" : "0%"} />
-        <MiniCard title="Session Time" value="03:14" />
+        <MiniCard title="Predictions" value={stats.total.toString()} />
+        <MiniCard title="Average Confidence" value={`${stats.total > 0 ? stats.avg.toFixed(1) : 0}%`} />
+        <MiniCard title="Best Prediction" value={`${stats.best.toFixed(1)}%`} />
+        <MiniCard title="Session Time" value={formatTime(sessionSeconds)} />
       </div>
 
       {/* ================= AI INSIGHTS ================= */}

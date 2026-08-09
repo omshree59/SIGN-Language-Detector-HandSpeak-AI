@@ -50,7 +50,7 @@ export default function Footer() {
               margin: 0,
             }}
           >
-            HandSpeak AI
+            LexiCue
           </h3>
 
           <p
@@ -60,7 +60,12 @@ export default function Footer() {
               color: "#78350F",
             }}
           >
+
+
+
             Real-Time Sign Language Translator
+
+            
           </p>
 
           <p
@@ -70,7 +75,7 @@ export default function Footer() {
               color: "#9A3412",
             }}
           >
-            Built using React • FastAPI • MediaPipe • PyTorch
+          
           </p>
         </div>
 
@@ -134,7 +139,7 @@ export default function Footer() {
           fontSize: 15,
         }}
       >
-        © {new Date().getFullYear()} HandSpeak AI • Built with ❤️ for
+        © {new Date().getFullYear()} LexiCue • Built with ❤️ for
         accessible communication.
       </div>
     </motion.footer>

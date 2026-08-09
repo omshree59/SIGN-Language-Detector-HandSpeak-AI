@@ -45,17 +45,57 @@ export default function Header({ backendStatus }: HeaderProps) {
       <div>
         <h1
           style={{
-            fontSize: "2.7rem",
+            fontSize: "3.2rem",
             fontWeight: 900,
             display: "flex",
             alignItems: "center",
-            gap: 12,
-            margin: 0,
+            margin: "-10px 0 0 0", // Move it up slightly
             letterSpacing: "-1.5px",
-            color: "#431407",
           }}
         >
-           LexiCue
+          <span style={{ color: "#431407" }}>
+            Le
+            <span style={{ position: "relative" }}>
+              x
+              <span
+                style={{
+                  position: "absolute",
+                  top: -8,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  fontSize: "0.95rem",
+                  textShadow: "0 2px 8px rgba(0,0,0,0.15)"
+                }}
+              >
+                🖐️
+              </span>
+            </span>
+            i
+          </span>
+          <span style={{ position: "relative" }}>
+            <span
+              style={{
+                background: "linear-gradient(135deg, #F97316 0%, #EA580C 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0px 2px 4px rgba(234,88,12,0.3))",
+              }}
+            >
+              Cue
+            </span>
+            <span
+              style={{
+                position: "absolute",
+                top: -8,
+                left: "50%", // Centers it over the 'u' perfectly
+                transform: "translateX(-50%)",
+                fontSize: "0.95rem",
+                textShadow: "0 2px 8px rgba(0,0,0,0.15)"
+              }}
+            >
+              🩺
+            </span>
+          </span>
         </h1>
 
         <p
@@ -68,29 +108,6 @@ export default function Header({ backendStatus }: HeaderProps) {
           Sign Language Translation Platform
         </p>
 
-        <div
-          style={{
-            display: "flex",
-            gap: 24,
-            marginTop: 16,
-            flexWrap: "wrap",
-          }}
-        >
-          <TechBadge
-            icon={<Cpu size={16} color="#EA580C" />}
-            text="PyTorch"
-          />
-
-          <TechBadge
-            icon={<Sparkles size={16} color="#D97706" />}
-            text="MediaPipe"
-          />
-
-          <TechBadge
-            icon={<Activity size={16} color="#B45309" />}
-            text="FastAPI"
-          />
-        </div>
       </div>
 
       {/* RIGHT */}
