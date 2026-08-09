@@ -184,15 +184,14 @@ handLandmarkerRef.current.detectForVideo(
         
         const xs = shiftedPoints.map(pt => pt[0]);
         const ys = shiftedPoints.map(pt => pt[1]);
-        const minX = Math.min(...xs), maxX = Math.max(...xs);
-        const minY = Math.min(...ys), maxY = Math.max(...ys);
         
-        const diagonal = Math.sqrt(Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2));
+        const distances = shiftedPoints.map(pt => Math.sqrt(pt[0]*pt[0] + pt[1]*pt[1] + pt[2]*pt[2]));
+        const maxDistance = Math.max(...distances);
         
         let flatList: number[] = [];
-        if (diagonal > 0) {
+        if (maxDistance > 0) {
           shiftedPoints.forEach(pt => {
-            flatList.push(pt[0] / diagonal, pt[1] / diagonal, pt[2] / diagonal);
+            flatList.push(pt[0] / maxDistance, pt[1] / maxDistance, pt[2] / maxDistance);
           });
         }
         

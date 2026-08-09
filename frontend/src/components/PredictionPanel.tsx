@@ -162,7 +162,7 @@ const healthScore = !isCameraActive
             opacity: 0.85,
             letterSpacing: 2,
             fontSize: 13,
-            color: "#9A3412",
+            color: "#FFEDD5",
           }}
         >
           CURRENT PREDICTION
@@ -186,7 +186,7 @@ const healthScore = !isCameraActive
             fontWeight: 900,
             lineHeight: 1,
             margin: "15px 0",
-            color: "#0F172A",
+            color: "#FFFFFF",
           }}
         >
           {isCameraActive ? currentSign : "-"}
@@ -196,7 +196,7 @@ const healthScore = !isCameraActive
           style={{
             fontSize: 36,
             fontWeight: 700,
-            color: "#431407",
+            color: "#FFF7ED",
           }}
         >
           {isCameraActive ? `${confidence.toFixed(1)}%` : "0%"}
@@ -207,7 +207,7 @@ const healthScore = !isCameraActive
             marginTop: 10,
             opacity: 0.9,
             fontWeight: 600,
-            color: "#9A3412",
+            color: "#FFEDD5",
           }}
         >
           {isCameraActive ? `${confidenceText} Prediction Confidence` : "Awaiting Camera Feed"}

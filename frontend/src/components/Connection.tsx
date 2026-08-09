@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 interface ConnectionProps {
   x1: number;
   y1: number;
@@ -54,24 +56,40 @@ export default function Connection({
       viewBox={`0 0 ${width} ${height}`}
       style={{
         position: "absolute",
-
         left: minX,
         top: minY,
-
         overflow: "visible",
-
         pointerEvents: "none",
-
         zIndex: 0,
       }}
     >
+      {/* Static faint line */}
       <path
         d={path}
         fill="none"
         stroke="#FDBA74"
         strokeWidth="2"
         strokeLinecap="round"
-        opacity="0.48"
+        opacity="0.2"
+      />
+      {/* Animated glowing energy pulse */}
+      <motion.path
+        d={path}
+        fill="none"
+        stroke="#F97316"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeDasharray="15 35"
+        animate={{
+          strokeDashoffset: [50, 0],
+        }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        style={{ filter: "drop-shadow(0 0 4px #F97316)" }}
+        opacity="0.8"
       />
     </svg>
   );

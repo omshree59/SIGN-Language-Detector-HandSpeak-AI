@@ -73,14 +73,13 @@ for letter in ALPHABET:
             wrist = raw_points[0]
             shifted_points = raw_points - wrist
             
-            # Normalize Step 2: Scale by the Bounding Box Diagonal
-            min_x, min_y, _ = np.min(shifted_points, axis=0)
-            max_x, max_y, _ = np.max(shifted_points, axis=0)
+            # Normalize Step 2: Scale by the Maximum Distance from the Wrist
+            # Calculate the Euclidean distance from the origin (wrist) for each point
+            distances = np.linalg.norm(shifted_points, axis=1)
+            max_distance = np.max(distances)
             
-            diagonal = np.sqrt((max_x - min_x)**2 + (max_y - min_y)**2)
-            
-            if diagonal > 0:
-                scaled_points = shifted_points / diagonal
+            if max_distance > 0:
+                scaled_points = shifted_points / max_distance
             else:
                 scaled_points = shifted_points
             
@@ -98,6 +97,6 @@ if len(all_data) > 0:
         
     df = pd.DataFrame(all_data, columns=cols)
     df.to_csv(OUTPUT_FILE, index=False)
-    print(f"✅ Success! Saved {len(all_data)} hand skeletons to {OUTPUT_FILE}")
+    print(f"Success! Saved {len(all_data)} hand skeletons to {OUTPUT_FILE}")
 else:
-    print("❌ Failed: No hands were detected or folders were empty.")
+    print("Failed: No hands were detected or folders were empty.")

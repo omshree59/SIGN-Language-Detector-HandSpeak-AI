@@ -37,23 +37,54 @@ X_test = torch.FloatTensor(X_test)
 y_train = torch.LongTensor(y_train)
 y_test = torch.LongTensor(y_test)
 
-# Create a custom data loader for batching
+# Create a custom data loader for batching with augmentation
 class ASLDataset(Dataset):
-    def __init__(self, features, labels):
+    def __init__(self, features, labels, augment=False):
         self.features = features
         self.labels = labels
+        self.augment = augment
         
     def __len__(self):
         return len(self.labels)
         
     def __getitem__(self, idx):
-        return self.features[idx], self.labels[idx]
+        feature = self.features[idx].clone()
+        
+        # Apply data augmentation during training
+        if self.augment:
+            # 0. Random horizontal flip (Left/Right hand invariance)
+            # X-coordinates are at indices 0, 3, 6, ..., 60
+            if torch.rand(1).item() > 0.5:
+                feature[0::3] *= -1
+                
+            # 0.5 Random Rotation (-15 to 15 degrees) for tilted hands
+            if torch.rand(1).item() > 0.5:
+                angle = torch.empty(1).uniform_(-15, 15).item() * (np.pi / 180.0)
+                cos_val = np.cos(angle)
+                sin_val = np.sin(angle)
+                
+                x = feature[0::3].clone()
+                y = feature[1::3].clone()
+                
+                feature[0::3] = x * cos_val - y * sin_val
+                feature[1::3] = x * sin_val + y * cos_val
+                
+            # 1. Random noise (Jitter): simulates MediaPipe inaccuracies
+            noise = torch.randn_like(feature) * 0.02 # 2% noise
+            feature += noise
+            
+            # 2. Random scaling: simulates slight distance changes
+            scale = torch.empty(1).uniform_(0.9, 1.1).item()
+            feature *= scale
+            
+        return feature, self.labels[idx]
 
-train_dataset = ASLDataset(X_train, y_train)
-test_dataset = ASLDataset(X_test, y_test)
+train_dataset = ASLDataset(X_train, y_train, augment=True)
+test_dataset = ASLDataset(X_test, y_test, augment=False)
 
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+# Increase batch size to 128 for faster training and use num_workers=0 to prevent lagging/freezing on Windows
+train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=0)
+test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False, num_workers=0)
 
 # --- 2. Model Architecture ---
 # This is the exact Multi-Layer Perceptron (MLP) from your specification
@@ -95,7 +126,7 @@ model = ASLModel(num_classes=len(label_encoder.classes_))
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-epochs = 50
+epochs = 300
 print(f"Starting training for {epochs} epochs...")
 
 for epoch in range(epochs):
@@ -137,8 +168,8 @@ with torch.no_grad():
         test_correct += (predicted == labels).sum().item()
 
 test_acc = (test_correct / len(test_dataset)) * 100
-print(f"\n✅ Training Complete! Final Test Accuracy: {test_acc:.2f}%")
+print(f"\nTraining Complete! Final Test Accuracy: {test_acc:.2f}%")
 
 # Save the trained brain (weights)
 torch.save(model.state_dict(), MODEL_PATH)
-print(f"💾 Model saved to {MODEL_PATH}")
+print(f"Model saved to {MODEL_PATH}")

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 interface HandNodeProps {
   letter: string;
@@ -15,8 +16,19 @@ export default function HandNode({
 }: HandNodeProps) {
   const [failed, setFailed] = useState(false);
 
+  // Deterministic animation duration based on letter so they don't all pulse identically
+  const animDuration = 1.8 + (letter.charCodeAt(0) % 5) * 0.2;
+
   return (
-    <div
+    <motion.div
+      animate={{
+        scale: [1, 1.15, 1],
+      }}
+      transition={{
+        duration: animDuration,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
       style={{
         position: "absolute",
 
@@ -84,6 +96,6 @@ export default function HandNode({
           {letter}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

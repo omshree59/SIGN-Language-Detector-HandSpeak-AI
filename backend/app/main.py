@@ -1,6 +1,8 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import json
+import wordninja
 
 # Import the prediction function from our ml_engine
 from app.ml_engine import predict_sign
@@ -15,6 +17,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class SentenceRequest(BaseModel):
+    raw_sentence: str
+
+@app.post("/api/convert-sentence")
+def convert_sentence(request: SentenceRequest):
+    # wordninja probabilistically splits concatenated words
+    # e.g., "iamgoodboy" -> ["i", "am", "good", "boy"]
+    words = wordninja.split(request.raw_sentence.lower())
+    
+    # Capitalize the first letter of the sentence, keep the rest lower
+    sentence = " ".join(words)
+    if sentence:
+        sentence = sentence[0].upper() + sentence[1:]
+        
+    return {"converted_sentence": sentence}
 
 @app.get("/")
 def read_root():

@@ -55,7 +55,7 @@ export default function Header({ backendStatus }: HeaderProps) {
             color: "#431407",
           }}
         >
-          🤟 LexiCue
+           LexiCue
         </h1>
 
         <p
@@ -65,7 +65,7 @@ export default function Header({ backendStatus }: HeaderProps) {
             fontSize: 16,
           }}
         >
-          Real-Time Sign Language Translation Platform
+          Sign Language Translation Platform
         </p>
 
         <div

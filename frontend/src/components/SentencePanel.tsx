@@ -13,6 +13,7 @@ import {
   Volume2,
   FileText,
   Sparkles,
+  Wand2,
 } from "lucide-react";
 
 interface SentencePanelProps {
@@ -158,10 +159,31 @@ export default function SentencePanel({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(5,1fr)",
+          gridTemplateColumns: "repeat(6,1fr)",
           gap: 16,
         }}
       >
+        <ActionButton
+          icon={<Wand2 size={20} />}
+          title="Convert AI"
+          color="#EC4899"
+          onClick={async () => {
+            if (!sentence.trim()) return;
+            try {
+              const res = await fetch("http://127.0.0.1:8000/api/convert-sentence", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ raw_sentence: sentence }),
+              });
+              const data = await res.json();
+              if (data.converted_sentence) {
+                setSentence(data.converted_sentence);
+              }
+            } catch (err) {
+              console.error("Failed to convert sentence:", err);
+            }
+          }}
+        />
         <ActionButton
           icon={<Volume2 size={20} />}
           title="Speak"
