@@ -52,7 +52,7 @@ export default function Header({ backendStatus }: HeaderProps) {
             gap: 12,
             margin: 0,
             letterSpacing: "-1.5px",
-            color: "#0F172A",
+            color: "#431407",
           }}
         >
           🤟 LexiCue
@@ -61,7 +61,7 @@ export default function Header({ backendStatus }: HeaderProps) {
         <p
           style={{
             margin: "7px 0 0",
-            color: "#475569",
+            color: "#78350F",
             fontSize: 16,
           }}
         >
@@ -77,17 +77,17 @@ export default function Header({ backendStatus }: HeaderProps) {
           }}
         >
           <TechBadge
-            icon={<Cpu size={16} color="#2563EB" />}
+            icon={<Cpu size={16} color="#EA580C" />}
             text="PyTorch"
           />
 
           <TechBadge
-            icon={<Sparkles size={16} color="#10B981" />}
+            icon={<Sparkles size={16} color="#D97706" />}
             text="MediaPipe"
           />
 
           <TechBadge
-            icon={<Activity size={16} color="#8B5CF6" />}
+            icon={<Activity size={16} color="#B45309" />}
             text="FastAPI"
           />
         </div>
@@ -120,7 +120,7 @@ export default function Header({ backendStatus }: HeaderProps) {
 
           <span
             style={{
-              color: "#0F172A",
+              color: "#431407",
               fontWeight: 800,
               fontSize: "1.45rem",
               letterSpacing: "-0.4px",
@@ -132,7 +132,7 @@ export default function Header({ backendStatus }: HeaderProps) {
 
         <p
           style={{
-            color: "#64748B",
+            color: "#78350F",
             margin: "6px 0 0",
             fontSize: 13,
           }}
@@ -157,7 +157,7 @@ function TechBadge({
         display: "flex",
         alignItems: "center",
         gap: 8,
-        color: "#334155",
+        color: "#78350F",
         fontSize: 14,
         fontWeight: 650,
       }}

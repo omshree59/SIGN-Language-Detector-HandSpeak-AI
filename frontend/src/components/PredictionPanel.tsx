@@ -98,6 +98,7 @@ const healthScore = !isCameraActive
             style={{
               fontSize: 26,
               fontWeight: 800,
+              color: "#431407",
             }}
           >
             AI Analytics Dashboard
@@ -106,7 +107,7 @@ const healthScore = !isCameraActive
           <p
             style={{
               marginTop: 6,
-              color: "#64748B",
+              color: "#78350F",
               fontSize: 14,
             }}
           >
@@ -148,12 +149,12 @@ const healthScore = !isCameraActive
           duration: 0.25,
         }}
         style={{
-          background: "linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.1))",
+          background: "linear-gradient(135deg, #F97316, #EA580C, #C2410C)",
           borderRadius: 24,
           padding: 30,
           textAlign: "center",
-          border: `2px solid ${isCameraActive ? confidenceColor : "rgba(148,163,184,0.3)"}`,
-          boxShadow: "0 10px 30px rgba(15,23,42,0.05)",
+          border: `2px solid ${isCameraActive ? confidenceColor : "rgba(251,146,60,0.3)"}`,
+          boxShadow: "0 20px 45px rgba(234,88,12,.35)",
         }}
       >
         <p
@@ -161,7 +162,7 @@ const healthScore = !isCameraActive
             opacity: 0.85,
             letterSpacing: 2,
             fontSize: 13,
-            color: "#64748B",
+            color: "#9A3412",
           }}
         >
           CURRENT PREDICTION
@@ -195,7 +196,7 @@ const healthScore = !isCameraActive
           style={{
             fontSize: 36,
             fontWeight: 700,
-            color: "#3B82F6",
+            color: "#431407",
           }}
         >
           {isCameraActive ? `${confidence.toFixed(1)}%` : "0%"}
@@ -206,7 +207,7 @@ const healthScore = !isCameraActive
             marginTop: 10,
             opacity: 0.9,
             fontWeight: 600,
-            color: "#64748B",
+            color: "#9A3412",
           }}
         >
           {isCameraActive ? `${confidenceText} Prediction Confidence` : "Awaiting Camera Feed"}
@@ -216,13 +217,13 @@ const healthScore = !isCameraActive
       {/* ================= CONFIDENCE ================= */}
       <div
         style={{
-          background: "rgba(255,255,255,0.24)",
+          background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
 padding: 20,
-border: "1px solid rgba(148,163,184,.20)",
-boxShadow: "0 8px 22px rgba(15,23,42,.045)",
+border: "1px solid rgba(251,146,60,.2)",
+boxShadow: "0 8px 22px rgba(0,0,0,.2)",
         }}
       >
         <div
@@ -236,6 +237,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
           <span
             style={{
               fontWeight: 600,
+              color: "#431407",
             }}
           >
             Confidence Score
@@ -243,7 +245,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
 
           <span
             style={{
-              color: isCameraActive ? confidenceColor : "#64748B",
+              color: isCameraActive ? confidenceColor : "#A8A29E",
               fontWeight: 700,
             }}
           >
@@ -255,7 +257,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
           style={{
             height: 14,
             borderRadius: 999,
-            background: "#E2E8F0",
+            background: "rgba(255,255,255,0.1)",
             overflow: "hidden",
           }}
         >
@@ -269,7 +271,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
             style={{
               height: "100%",
               borderRadius: 999,
-              background: `linear-gradient(90deg,#3B82F6,${confidenceColor})`,
+              background: `linear-gradient(90deg,#F97316,${confidenceColor})`,
             }}
           />
         </div>
@@ -277,7 +279,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         <div
           style={{
             marginTop: 14,
-            color: "#64748B",
+            color: "#78350F",
             fontSize: 14,
           }}
         >
@@ -335,13 +337,13 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= SYSTEM HEALTH ================= */}
       <div
         style={{
-         background: "rgba(255,255,255,0.24)",
+         background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
 padding: 20,
-border: "1px solid rgba(148,163,184,.20)",
-boxShadow: "0 8px 22px rgba(15,23,42,.045)",
+border: "1px solid rgba(251,146,60,.2)",
+boxShadow: "0 8px 22px rgba(0,0,0,.2)",
         }}
       >
         <div
@@ -352,12 +354,13 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
             marginBottom: 18,
           }}
         >
-          <Cpu size={22} color="#3B82F6" />
+          <Cpu size={22} color="#F97316" />
 
           <h3
             style={{
               fontWeight: 700,
               fontSize: 20,
+              color: "#431407",
             }}
           >
             System Health
@@ -403,13 +406,13 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= AI HEALTH SCORE ================= */}
       <div
         style={{
-         background: "rgba(255,255,255,0.24)",
+         background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
 padding: 20,
-border: "1px solid rgba(148,163,184,.20)",
-boxShadow: "0 8px 22px rgba(15,23,42,.045)",
+border: "1px solid rgba(251,146,60,.2)",
+boxShadow: "0 8px 22px rgba(0,0,0,.2)",
         }}
       >
         <div
@@ -422,6 +425,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
           <span
             style={{
               fontWeight: 700,
+              color: "#431407",
             }}
           >
             Overall AI Health
@@ -440,7 +444,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         <div
           style={{
             height: 12,
-            background: "#E2E8F0",
+            background: "rgba(255,255,255,0.1)",
             borderRadius: 999,
             overflow: "hidden",
           }}
@@ -463,7 +467,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         <p
           style={{
             marginTop: 14,
-            color: "#64748B",
+            color: "#78350F",
             fontSize: 14,
             lineHeight: 1.6,
           }}
@@ -485,13 +489,13 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= CONFIDENCE HISTORY ================= */}
       <div
         style={{
-          background: "rgba(255,255,255,0.24)",
+          background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
 padding: 20,
-border: "1px solid rgba(148,163,184,.20)",
-boxShadow: "0 8px 22px rgba(15,23,42,.045)",
+border: "1px solid rgba(251,146,60,.2)",
+boxShadow: "0 8px 22px rgba(0,0,0,.2)",
         }}
       >
         <div
@@ -506,6 +510,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
             style={{
               fontWeight: 700,
               fontSize: 20,
+              color: "#431407",
             }}
           >
             Confidence History
@@ -513,7 +518,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
 
           <span
             style={{
-              color: "#64748B",
+              color: "#78350F",
               fontSize: 13,
             }}
           >
@@ -525,9 +530,9 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
           style={{
             position: "relative",
             height: 170,
-            background: "rgba(255,255,255,0.4)",
+            background: "rgba(0,0,0,0.3)",
             borderRadius: 16,
-            border: "1px solid rgba(148,163,184,.2)",
+            border: "1px solid rgba(251,146,60,.15)",
             overflow: "hidden",
           }}
         >
@@ -535,8 +540,8 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
   <LineChart data={chartData}>
     <defs>
       <linearGradient id="confidenceFill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.45} />
-        <stop offset="100%" stopColor="#3B82F6" stopOpacity={0} />
+        <stop offset="0%" stopColor="#F97316" stopOpacity={0.45} />
+        <stop offset="100%" stopColor="#F97316" stopOpacity={0} />
       </linearGradient>
     </defs>
 
@@ -553,12 +558,12 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
     <Line
       type="monotone"
       dataKey="confidence"
-      stroke="#3B82F6"
+      stroke="#F97316"
       strokeWidth={4}
       dot={false}
       activeDot={{
         r: 6,
-        fill: "#60A5FA",
+        fill: "#FB923C",
         stroke: "#fff",
         strokeWidth: 2,
       }}
@@ -572,7 +577,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
               position: "absolute",
               bottom: 12,
               left: 18,
-              color: "#64748B",
+              color: "#78350F",
               fontSize: 12,
             }}
           >
@@ -598,13 +603,13 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= AI INSIGHTS ================= */}
       <div
         style={{
-          background: "rgba(255,255,255,0.24)",
+          background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
 padding: 20,
-border: "1px solid rgba(148,163,184,.20)",
-boxShadow: "0 8px 22px rgba(15,23,42,.045)",
+border: "1px solid rgba(251,146,60,.2)",
+boxShadow: "0 8px 22px rgba(0,0,0,.2)",
         }}
       >
         <div
@@ -615,8 +620,8 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
             marginBottom: 16,
           }}
         >
-          <Brain size={22} color="#3B82F6" />
-          <h3 style={{ fontWeight: 700 }}>AI Insights</h3>
+          <Brain size={22} color="#F97316" />
+          <h3 style={{ fontWeight: 700, color: "#431407" }}>AI Insights</h3>
         </div>
 
         <Insight color="#10B981" text="Hand landmarks detected successfully." />
@@ -650,7 +655,8 @@ function StatusRow({ icon, title, value, color }: StatusRowProps) {
         <span style={{ color }}>{icon}</span>
         <span
   style={{
-    color: "#334155",
+    color: "#78350F",
+
     fontSize: 13,
     fontWeight: 600,
   }}
@@ -677,20 +683,20 @@ function MetricCard({ icon, title, value, subtitle, color }: MetricCardProps) {
       whileHover={{ y: -6, scale: 1.04 }}
       transition={{ duration: .2 }}
       style={{
-        background: "rgba(248,250,252,.92)",
+        background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(14px)",
 WebkitBackdropFilter: "blur(14px)",
-border: "1px solid rgba(148,163,184,.20)",
+border: "1px solid rgba(251,146,60,.2)",
 borderRadius: 16,
 padding: 18,
 cursor: "pointer",
-boxShadow: "0 7px 18px rgba(15,23,42,.045)",
+boxShadow: "0 7px 18px rgba(0,0,0,.2)",
       }}
     >
       <div style={{ color, marginBottom: 14 }}>{icon}</div>
-      <div style={{ color: "#64748B", fontSize: 13 }}>{title}</div>
-      <div style={{ fontSize: 21, fontWeight: 800, marginTop: 6 }}>{value}</div>
-      <div style={{ color: "#64748B", fontSize: 12, marginTop: 5 }}>{subtitle}</div>
+      <div style={{ color: "#78350F", fontSize: 13 }}>{title}</div>
+      <div style={{ fontSize: 21, fontWeight: 800, marginTop: 6, color: "#431407" }}>{value}</div>
+      <div style={{ color: "#78350F", fontSize: 12, marginTop: 5 }}>{subtitle}</div>
     </motion.div>
   );
 }
@@ -705,15 +711,15 @@ function MiniCard({ title, value }: MiniCardProps) {
     <motion.div
       whileHover={{ scale: 1.03 }}
       style={{
-        background: "rgba(255,255,255,.94)",
-border: "1px solid rgba(148,163,184,.22)",
+        background: "rgba(255,255,255,0.4)",
+border: "1px solid rgba(251,146,60,.2)",
 borderRadius: 14,
 padding: 15,
-boxShadow: "0 6px 16px rgba(15,23,42,.045)",
+boxShadow: "0 6px 16px rgba(0,0,0,.2)",
       }}
     >
-      <div style={{ color: "#64748B", fontSize: 13 }}>{title}</div>
-      <div style={{ marginTop: 8, fontWeight: 800, fontSize: 21 }}>{value}</div>
+      <div style={{ color: "#78350F", fontSize: 13 }}>{title}</div>
+      <div style={{ marginTop: 8, fontWeight: 800, fontSize: 21, color: "#431407" }}>{value}</div>
     </motion.div>
   );
 }
@@ -738,7 +744,7 @@ function Insight({ text, color }: InsightProps) {
           boxShadow: `0 0 10px ${color}`,
         }}
       />
-      <span style={{ color: "#475569", fontSize: 14 }}>{text}</span>
+      <span style={{ color: "#D6D3D1", fontSize: 14 }}>{text}</span>
     </motion.div>
   );
 }

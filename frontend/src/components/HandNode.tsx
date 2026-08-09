@@ -53,7 +53,7 @@ export default function HandNode({
             pointerEvents: "none",
 
             filter:
-              "drop-shadow(0 5px 10px rgba(15,23,42,0.12))",
+              "drop-shadow(0 5px 10px rgba(234,88,12,0.15))",
           }}
         />
       ) : (
@@ -64,21 +64,21 @@ export default function HandNode({
 
             borderRadius: "50%",
 
-            background: "rgba(255,255,255,0.9)",
+            background: "rgba(255,237,213,0.9)",
 
-            border: "2px solid #CBD5E1",
+            border: "2px solid #FDBA74",
 
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
 
-            color: "#475569",
+            color: "#9A3412",
 
             fontWeight: 700,
             fontSize: 20,
 
             boxShadow:
-              "0 6px 14px rgba(15,23,42,0.10)",
+              "0 6px 14px rgba(234,88,12,0.12)",
           }}
         >
           {letter}

@@ -58,7 +58,7 @@ export default function CameraPanel({
               fontWeight: 750,
               fontSize: 18,
               margin: 0,
-              color: "#0F172A",
+              color: "#431407",
             }}
           >
             Live Camera
@@ -316,7 +316,7 @@ function InfoCard({
     >
       <div
         style={{
-          color: "#2563EB",
+          color: "#F97316",
           marginBottom: 9,
         }}
       >
@@ -325,7 +325,7 @@ function InfoCard({
 
       <div
         style={{
-          color: "#64748B",
+          color: "#78350F",
           fontSize: 12,
         }}
       >
@@ -334,7 +334,7 @@ function InfoCard({
 
       <div
         style={{
-          color: "#0F172A",
+          color: "#431407",
           fontWeight: 750,
           marginTop: 4,
         }}

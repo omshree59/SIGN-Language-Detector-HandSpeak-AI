@@ -66,6 +66,7 @@ export default function SentencePanel({
             style={{
               fontSize: 28,
               fontWeight: 800,
+              color: "#431407",
             }}
           >
             Sentence Builder
@@ -74,7 +75,7 @@ export default function SentencePanel({
           <p
             style={{
               marginTop: 6,
-              color: "#64748B",
+              color: "#78350F",
             }}
           >
             Real-time ASL Translation Output
@@ -95,9 +96,9 @@ export default function SentencePanel({
             alignItems: "center",
             padding: "10px 18px",
             borderRadius: 999,
-            background: "#2563EB22",
-            border: "1px solid #2563EB55",
-            color: "#3B82F6",
+            background: "rgba(249,115,22,0.15)",
+            border: "1px solid rgba(249,115,22,0.4)",
+            color: "#FB923C",
             fontWeight: 700,
           }}
         >
@@ -113,11 +114,11 @@ export default function SentencePanel({
           scale: 1.01,
         }}
         style={{
-  background: "rgba(255,255,255,0.24)",
+  background: "rgba(255,255,255,0.4)",
   backdropFilter: "blur(12px)",
   WebkitBackdropFilter: "blur(12px)",
-  border: "1px solid rgba(148,163,184,0.22)",
-  boxShadow: "0 8px 22px rgba(15,23,42,0.04)",
+  border: "1px solid rgba(251,146,60,0.2)",
+  boxShadow: "0 8px 22px rgba(0,0,0,0.2)",
   borderRadius: 22,
   padding: 25,
   minHeight: 220,
@@ -132,7 +133,7 @@ export default function SentencePanel({
             lineHeight: 1.8,
             fontWeight: 600,
             wordBreak: "break-word",
-            color: sentence ? "#0F172A" : "#64748B",
+            color: sentence ? "#431407" : "#78350F",
           }}
         >
           {sentence || "Start signing to build your sentence..."}
@@ -143,7 +144,7 @@ export default function SentencePanel({
             marginTop: 24,
             display: "flex",
             justifyContent: "space-between",
-            color: "#64748B",
+            color: "#78350F",
             fontSize: 13
           }}
         >
@@ -265,13 +266,13 @@ speechSynthesis.speak(utterance);
 
       <div
         style={{
-          background: "rgba(248,250,252,.90)",
+          background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
-border: "1px solid rgba(148,163,184,.20)",
+border: "1px solid rgba(251,146,60,.2)",
 borderRadius: 18,
 padding: 20,
-boxShadow: "0 7px 20px rgba(15,23,42,.04)",
+boxShadow: "0 7px 20px rgba(0,0,0,.2)",
         }}
       >
         <div
@@ -286,6 +287,7 @@ boxShadow: "0 7px 20px rgba(15,23,42,.04)",
             style={{
               fontSize: 20,
               fontWeight: 700,
+              color: "#431407",
             }}
           >
             Gesture Hold Progress
@@ -293,7 +295,7 @@ boxShadow: "0 7px 20px rgba(15,23,42,.04)",
 
           <span
             style={{
-              color: "#3B82F6",
+              color: "#F97316",
               fontWeight: 700,
             }}
           >
@@ -306,7 +308,7 @@ boxShadow: "0 7px 20px rgba(15,23,42,.04)",
             height: 14,
             borderRadius: 999,
             overflow: "hidden",
-            background: "#E2E8F0",
+            background: "rgba(255,255,255,0.1)",
           }}
         >
           <motion.div
@@ -319,7 +321,7 @@ boxShadow: "0 7px 20px rgba(15,23,42,.04)",
             style={{
               height: "100%",
               background:
-                "linear-gradient(90deg,#2563EB,#22C55E)",
+                "linear-gradient(90deg,#F97316,#22C55E)",
             }}
           />
         </div>
@@ -327,7 +329,7 @@ boxShadow: "0 7px 20px rgba(15,23,42,.04)",
         <p
           style={{
             marginTop: 15,
-            color: "#64748B",
+            color: "#78350F",
             fontSize: 13
           }}
         >
@@ -373,13 +375,13 @@ boxShadow: "0 7px 20px rgba(15,23,42,.04)",
 
       <div
         style={{
-          background: "rgba(248,250,252,.90)",
+          background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
-border: "1px solid rgba(148,163,184,.20)",
+border: "1px solid rgba(251,146,60,.2)",
 borderRadius: 18,
 padding: 20,
-boxShadow: "0 7px 20px rgba(15,23,42,.04)",
+boxShadow: "0 7px 20px rgba(0,0,0,.2)",
         }}
       >
         <div
@@ -392,13 +394,14 @@ boxShadow: "0 7px 20px rgba(15,23,42,.04)",
         >
           <Sparkles
             size={22}
-            color="#3B82F6"
+            color="#F97316"
           />
 
           <h3
             style={{
               fontSize: 20,
               fontWeight: 700,
+              color: "#431407",
             }}
           >
             Smart AI Tips
@@ -457,15 +460,15 @@ function ActionButton({
       }}
       onClick={onClick}
       style={{
-        background: "rgba(255,255,255,.94)",
+        background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(14px)",
 WebkitBackdropFilter: "blur(14px)",
 border: `1px solid ${color}45`,
 borderRadius: 15,
 padding: 15,
-color: "#0F172A",
+color: "#431407",
 boxShadow:
-  "0 7px 18px rgba(15,23,42,.05), inset 0 1px 0 rgba(255,255,255,.95)",
+  "0 7px 18px rgba(0,0,0,.2)",
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
@@ -515,18 +518,18 @@ function MiniInfoCard({
         y: -4,
       }}
       style={{
-        background: "rgba(248,250,252,.90)",
+        background: "rgba(255,255,255,0.4)",
 backdropFilter: "blur(14px)",
 WebkitBackdropFilter: "blur(14px)",
-border: "1px solid rgba(148,163,184,.18)",
+border: "1px solid rgba(251,146,60,.18)",
 borderRadius: 15,
 padding: 16,
-boxShadow: "0 6px 18px rgba(15,23,42,.04)",
+boxShadow: "0 6px 18px rgba(0,0,0,.2)",
       }}
     >
       <div
         style={{
-          color: "#64748B",
+          color: "#78350F",
           fontSize: 13,
         }}
       >
@@ -568,17 +571,17 @@ function StatusCard({
         scale: 1.03,
       }}
       style={{
-        background: "rgba(255,255,255,.9)",
-        border: "1px solid rgba(148,163,184,.2)",
+        background: "rgba(255,255,255,0.4)",
+        border: "1px solid rgba(251,146,60,.2)",
         borderRadius: 15,
         padding: 16,
         textAlign: "center",
-        boxShadow: "0 8px 20px rgba(15,23,42,.05)",
+        boxShadow: "0 8px 20px rgba(0,0,0,.2)",
       }}
     >
       <div
         style={{
-          color: "#64748B",
+          color: "#78350F",
           fontSize: 13,
         }}
       >
@@ -636,7 +639,7 @@ function Tip({
 
       <span
         style={{
-          color: "#475569",
+          color: "#78350F",
 fontSize: 14
         }}
       >

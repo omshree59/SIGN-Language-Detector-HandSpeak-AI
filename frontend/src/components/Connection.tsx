@@ -68,7 +68,7 @@ export default function Connection({
       <path
         d={path}
         fill="none"
-        stroke="#94A3B8"
+        stroke="#FDBA74"
         strokeWidth="2"
         strokeLinecap="round"
         opacity="0.48"
