@@ -13,29 +13,28 @@ export default function Footer() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
       style={{
-        marginTop: 40,
-        borderTop: "1px solid #334155",
-        padding: "28px 0",
-        color: "#94A3B8",
+        marginTop: 50,
+        borderTop: "1px solid rgba(148,163,184,.25)",
+        padding: "32px 0 20px",
       }}
     >
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 20,
+          display: "grid",
+          gridTemplateColumns: "1.3fr 1fr auto",
+          alignItems: "end",
+          gap: 40,
         }}
       >
-        {/* Left */}
+        {/* LEFT */}
 
         <div>
           <h3
             style={{
-              fontSize: 20,
-              fontWeight: 700,
-              color: "#F8FAFC",
+              fontSize: 32,
+              fontWeight: 800,
+              color: "#111827",
+              margin: 0,
             }}
           >
             HandSpeak AI
@@ -43,8 +42,9 @@ export default function Footer() {
 
           <p
             style={{
-              marginTop: 6,
-              fontSize: 14,
+              marginTop: 8,
+              fontSize: 18,
+              color: "#475569",
             }}
           >
             Real-Time Sign Language Translator
@@ -52,8 +52,8 @@ export default function Footer() {
 
           <p
             style={{
-              marginTop: 4,
-              fontSize: 13,
+              marginTop: 6,
+              fontSize: 15,
               color: "#64748B",
             }}
           >
@@ -61,37 +61,39 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Center */}
+        {/* CENTER */}
 
-        <div
-          style={{
-            display: "flex",
-            gap: 24,
-            alignItems: "center",
-          }}
-        >
+       <div
+  style={{
+    display: "flex",
+    justifyContent: "flex-start",
+    gap: 32,
+    alignItems: "center",
+    paddingBottom: 6,
+    marginLeft: "-270px", // move left
+  }}
+>
+        
           <FooterItem
-            icon={<Cpu size={18} />}
+            icon={<Cpu size={20} />}
             text="AI Powered"
           />
 
           <FooterItem
-            icon={<ShieldCheck size={18} />}
+            icon={<ShieldCheck size={20} />}
             text="100% Offline"
           />
 
           <FooterItem
-            icon={<Heart size={18} />}
+            icon={<Heart size={20} />}
             text="Open Source"
           />
         </div>
 
-        {/* Right */}
+        {/* RIGHT */}
 
         <motion.a
-          whileHover={{
-            scale: 1.08,
-          }}
+          whileHover={{ scale: 1.08 }}
           href="https://github.com/omshree59"
           target="_blank"
           rel="noreferrer"
@@ -99,27 +101,28 @@ export default function Footer() {
             display: "flex",
             alignItems: "center",
             gap: 10,
-            color: "#CBD5E1",
+            color: "#111827",
             textDecoration: "none",
-            fontWeight: 600,
+            fontWeight: 700,
+            fontSize: 22,
+            paddingBottom: 6,
           }}
         >
-          
-          <span style={{ fontSize: 22 }}>🐙</span>
+          <span style={{ fontSize: 30 }}>👾</span>
           GitHub
         </motion.a>
       </div>
 
       <div
         style={{
-          marginTop: 24,
+          marginTop: 28,
           textAlign: "center",
           color: "#64748B",
-          fontSize: 13,
+          fontSize: 15,
         }}
       >
-        © {new Date().getFullYear()} HandSpeak AI •
-        Built with ❤️ for accessible communication.
+        © {new Date().getFullYear()} HandSpeak AI • Built with ❤️ for
+        accessible communication.
       </div>
     </motion.footer>
   );
@@ -138,18 +141,14 @@ function FooterItem({
     <div
       style={{
         display: "flex",
-        gap: 8,
         alignItems: "center",
+        gap: 10,
+        color: "#111827",
+        fontWeight: 600,
+        fontSize: 22,
       }}
     >
-      <span
-        style={{
-          color: "#3B82F6",
-        }}
-      >
-        {icon}
-      </span>
-
+      <span style={{ color: "#2563EB" }}>{icon}</span>
       <span>{text}</span>
     </div>
   );

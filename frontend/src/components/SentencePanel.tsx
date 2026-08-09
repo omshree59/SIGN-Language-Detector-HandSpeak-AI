@@ -42,7 +42,7 @@ export default function SentencePanel({
       initial={{ opacity: 0, y: 35 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: .45 }}
-      className="card"
+      className="glass-panel"
       style={{
         padding: 28,
         display: "flex",
@@ -72,7 +72,7 @@ export default function SentencePanel({
           <p
             style={{
               marginTop: 6,
-              color: "#94A3B8",
+              color: "#64748B",
             }}
           >
             Real-time ASL Translation Output
@@ -111,8 +111,11 @@ export default function SentencePanel({
           scale: 1.01,
         }}
         style={{
-          background: "#0F172A",
-          border: "1px solid #334155",
+          background: "rgba(255,255,255,.96)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+border: "1px solid rgba(148,163,184,.18)",
+boxShadow: "inset 0 1px 0 rgba(255,255,255,.95)",
           borderRadius: 22,
           padding: 25,
           minHeight: 220,
@@ -127,7 +130,7 @@ export default function SentencePanel({
             lineHeight: 1.8,
             fontWeight: 600,
             wordBreak: "break-word",
-            color: sentence ? "#F8FAFC" : "#64748B",
+            color: sentence ? "#0F172A" : "#64748B",
           }}
         >
           {sentence || "Start signing to build your sentence..."}
@@ -139,7 +142,7 @@ export default function SentencePanel({
             display: "flex",
             justifyContent: "space-between",
             color: "#64748B",
-            fontSize: 14,
+            fontSize: 13
           }}
         >
           <span>{characters} Characters</span>
@@ -260,10 +263,13 @@ speechSynthesis.speak(utterance);
 
       <div
         style={{
-          background: "#1E293B",
-          borderRadius: 20,
-          padding: 22,
-          border: "1px solid #334155",
+          background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+border: "1px solid rgba(148,163,184,.20)",
+borderRadius: 18,
+padding: 20,
+boxShadow: "0 7px 20px rgba(15,23,42,.04)",
         }}
       >
         <div
@@ -298,7 +304,7 @@ speechSynthesis.speak(utterance);
             height: 14,
             borderRadius: 999,
             overflow: "hidden",
-            background: "#111827",
+            background: "#E2E8F0",
           }}
         >
           <motion.div
@@ -319,8 +325,8 @@ speechSynthesis.speak(utterance);
         <p
           style={{
             marginTop: 15,
-            color: "#94A3B8",
-            fontSize: 14,
+            color: "#64748B",
+            fontSize: 13
           }}
         >
           Hold the same gesture until the bar reaches 100%.
@@ -365,10 +371,13 @@ speechSynthesis.speak(utterance);
 
       <div
         style={{
-          background: "#1E293B",
-          borderRadius: 20,
-          padding: 22,
-          border: "1px solid #334155",
+          background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+border: "1px solid rgba(148,163,184,.20)",
+borderRadius: 18,
+padding: 20,
+boxShadow: "0 7px 20px rgba(15,23,42,.04)",
         }}
       >
         <div
@@ -446,15 +455,19 @@ function ActionButton({
       }}
       onClick={onClick}
       style={{
-        background: "#1E293B",
-        border: `1px solid ${color}`,
-        borderRadius: 18,
-        padding: 18,
-        color: "white",
+        background: "rgba(255,255,255,.94)",
+backdropFilter: "blur(14px)",
+WebkitBackdropFilter: "blur(14px)",
+border: `1px solid ${color}45`,
+borderRadius: 15,
+padding: 15,
+color: "#0F172A",
+boxShadow:
+  "0 7px 18px rgba(15,23,42,.05), inset 0 1px 0 rgba(255,255,255,.95)",
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
-        gap: 12,
+        gap: 8,
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -470,7 +483,7 @@ function ActionButton({
       <span
         style={{
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 13
         }}
       >
         {title}
@@ -500,15 +513,18 @@ function MiniInfoCard({
         y: -4,
       }}
       style={{
-        background: "#1E293B",
-        border: "1px solid #334155",
-        borderRadius: 18,
-        padding: 18,
+        background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(14px)",
+WebkitBackdropFilter: "blur(14px)",
+border: "1px solid rgba(148,163,184,.18)",
+borderRadius: 15,
+padding: 16,
+boxShadow: "0 6px 18px rgba(15,23,42,.04)",
       }}
     >
       <div
         style={{
-          color: "#94A3B8",
+          color: "#64748B",
           fontSize: 13,
         }}
       >
@@ -550,16 +566,17 @@ function StatusCard({
         scale: 1.03,
       }}
       style={{
-        background: "#111827",
-        border: "1px solid #334155",
-        borderRadius: 18,
-        padding: 20,
-        textAlign: "center",
+        background: "#172033",
+border: "1px solid rgba(255,255,255,.10)",
+borderRadius: 15,
+padding: 16,
+textAlign: "center",
+boxShadow: "0 8px 20px rgba(15,23,42,.10)",
       }}
     >
       <div
         style={{
-          color: "#94A3B8",
+          color: "#CBD5E1",
           fontSize: 13,
         }}
       >
@@ -617,8 +634,8 @@ function Tip({
 
       <span
         style={{
-          color: "#CBD5E1",
-          fontSize: 15,
+          color: "#475569",
+fontSize: 14
         }}
       >
         {text}

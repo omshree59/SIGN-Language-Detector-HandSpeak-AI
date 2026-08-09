@@ -35,6 +35,7 @@ export default function PredictionPanel({
   confidenceHistory,
   isModelLoaded,
   isCameraActive,
+  backendStatus,
 }: PredictionPanelProps) {
   const confidenceColor =
     confidence >= 90
@@ -74,7 +75,7 @@ const healthScore = !isCameraActive
       initial={{ opacity: 0, x: 35 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.45 }}
-      className="card"
+      className="glass-panel"
       style={{
         padding: 24,
         display: "flex",
@@ -103,7 +104,7 @@ const healthScore = !isCameraActive
           <p
             style={{
               marginTop: 6,
-              color: "#94A3B8",
+              color: "#64748B",
               fontSize: 14,
             }}
           >
@@ -211,10 +212,13 @@ const healthScore = !isCameraActive
       {/* ================= CONFIDENCE ================= */}
       <div
         style={{
-          background: "#1E293B",
-          borderRadius: 20,
-          padding: 22,
-          border: "1px solid #334155",
+          background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+borderRadius: 18,
+padding: 20,
+border: "1px solid rgba(148,163,184,.20)",
+boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         }}
       >
         <div
@@ -247,7 +251,7 @@ const healthScore = !isCameraActive
           style={{
             height: 14,
             borderRadius: 999,
-            background: "#111827",
+            background: "#E2E8F0",
             overflow: "hidden",
           }}
         >
@@ -269,7 +273,7 @@ const healthScore = !isCameraActive
         <div
           style={{
             marginTop: 14,
-            color: "#94A3B8",
+            color: "#64748B",
             fontSize: 14,
           }}
         >
@@ -327,10 +331,13 @@ const healthScore = !isCameraActive
       {/* ================= SYSTEM HEALTH ================= */}
       <div
         style={{
-          background: "#1E293B",
-          borderRadius: 20,
-          padding: 22,
-          border: "1px solid #334155",
+          background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+borderRadius: 18,
+padding: 20,
+border: "1px solid rgba(148,163,184,.20)",
+boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         }}
       >
         <div
@@ -392,10 +399,13 @@ const healthScore = !isCameraActive
       {/* ================= AI HEALTH SCORE ================= */}
       <div
         style={{
-          background: "#1E293B",
-          borderRadius: 20,
-          padding: 22,
-          border: "1px solid #334155",
+          background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+borderRadius: 18,
+padding: 20,
+border: "1px solid rgba(148,163,184,.20)",
+boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         }}
       >
         <div
@@ -426,7 +436,7 @@ const healthScore = !isCameraActive
         <div
           style={{
             height: 12,
-            background: "#111827",
+            background: "#E2E8F0",
             borderRadius: 999,
             overflow: "hidden",
           }}
@@ -449,7 +459,7 @@ const healthScore = !isCameraActive
         <p
           style={{
             marginTop: 14,
-            color: "#94A3B8",
+            color: "#64748B",
             fontSize: 14,
             lineHeight: 1.6,
           }}
@@ -471,10 +481,13 @@ const healthScore = !isCameraActive
       {/* ================= CONFIDENCE HISTORY ================= */}
       <div
         style={{
-          background: "#1E293B",
-          borderRadius: 20,
-          padding: 22,
-          border: "1px solid #334155",
+          background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+borderRadius: 18,
+padding: 20,
+border: "1px solid rgba(148,163,184,.20)",
+boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         }}
       >
         <div
@@ -496,7 +509,7 @@ const healthScore = !isCameraActive
 
           <span
             style={{
-              color: "#94A3B8",
+              color: "#64748B",
               fontSize: 13,
             }}
           >
@@ -510,7 +523,7 @@ const healthScore = !isCameraActive
             height: 170,
             background: "#0F172A",
             borderRadius: 16,
-            border: "1px solid #334155",
+            border: "1px solid rgba(255,255,255,.65)",
             overflow: "hidden",
           }}
         >
@@ -581,10 +594,13 @@ const healthScore = !isCameraActive
       {/* ================= AI INSIGHTS ================= */}
       <div
         style={{
-          background: "#1E293B",
-          borderRadius: 20,
-          padding: 22,
-          border: "1px solid #334155",
+          background: "rgba(248,250,252,.90)",
+backdropFilter: "blur(16px)",
+WebkitBackdropFilter: "blur(16px)",
+borderRadius: 18,
+padding: 20,
+border: "1px solid rgba(148,163,184,.20)",
+boxShadow: "0 8px 22px rgba(15,23,42,.045)",
         }}
       >
         <div
@@ -628,7 +644,15 @@ function StatusRow({ icon, title, value, color }: StatusRowProps) {
     >
       <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
         <span style={{ color }}>{icon}</span>
-        <span>{title}</span>
+        <span
+  style={{
+    color: "#334155",
+    fontSize: 13,
+    fontWeight: 600,
+  }}
+>
+  {title}
+</span>
       </div>
       <span style={{ color, fontWeight: 700 }}>{value}</span>
     </motion.div>
@@ -649,16 +673,19 @@ function MetricCard({ icon, title, value, subtitle, color }: MetricCardProps) {
       whileHover={{ y: -6, scale: 1.04 }}
       transition={{ duration: .2 }}
       style={{
-        background: "#1E293B",
-        border: "1px solid #334155",
-        borderRadius: 18,
-        padding: 20,
-        cursor: "pointer",
+        background: "rgba(248,250,252,.92)",
+backdropFilter: "blur(14px)",
+WebkitBackdropFilter: "blur(14px)",
+border: "1px solid rgba(148,163,184,.20)",
+borderRadius: 16,
+padding: 18,
+cursor: "pointer",
+boxShadow: "0 7px 18px rgba(15,23,42,.045)",
       }}
     >
       <div style={{ color, marginBottom: 14 }}>{icon}</div>
-      <div style={{ color: "#94A3B8", fontSize: 13 }}>{title}</div>
-      <div style={{ fontSize: 24, fontWeight: 800, marginTop: 6 }}>{value}</div>
+      <div style={{ color: "#64748B", fontSize: 13 }}>{title}</div>
+      <div style={{ fontSize: 21, fontWeight: 800, marginTop: 6 }}>{value}</div>
       <div style={{ color: "#64748B", fontSize: 12, marginTop: 5 }}>{subtitle}</div>
     </motion.div>
   );
@@ -674,14 +701,15 @@ function MiniCard({ title, value }: MiniCardProps) {
     <motion.div
       whileHover={{ scale: 1.03 }}
       style={{
-        background: "#111827",
-        border: "1px solid #334155",
-        borderRadius: 16,
-        padding: 18,
+        background: "rgba(255,255,255,.94)",
+border: "1px solid rgba(148,163,184,.22)",
+borderRadius: 14,
+padding: 15,
+boxShadow: "0 6px 16px rgba(15,23,42,.045)",
       }}
     >
-      <div style={{ color: "#94A3B8", fontSize: 13 }}>{title}</div>
-      <div style={{ marginTop: 8, fontWeight: 800, fontSize: 24 }}>{value}</div>
+      <div style={{ color: "#64748B", fontSize: 13 }}>{title}</div>
+      <div style={{ marginTop: 8, fontWeight: 800, fontSize: 21 }}>{value}</div>
     </motion.div>
   );
 }
@@ -706,7 +734,7 @@ function Insight({ text, color }: InsightProps) {
           boxShadow: `0 0 10px ${color}`,
         }}
       />
-      <span style={{ color: "#CBD5E1", fontSize: 14 }}>{text}</span>
+      <span style={{ color: "#475569", fontSize: 14 }}>{text}</span>
     </motion.div>
   );
 }

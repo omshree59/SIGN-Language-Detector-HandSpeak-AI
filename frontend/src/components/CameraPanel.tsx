@@ -16,8 +16,6 @@ export default function CameraPanel({
   videoRef,
   canvasRef,
   isModelLoaded,
-  currentSign,
-  confidence,
   isCameraActive,
   toggleCamera,
 }: CameraPanelProps) {
@@ -26,20 +24,22 @@ export default function CameraPanel({
       initial={{ opacity: 0, x: -25 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.45 }}
-      className="card"
+      className="glass-panel"
       style={{
         overflow: "hidden",
         position: "relative",
+        borderRadius: 24,
       }}
     >
-      {/* Top Header */}
+      {/* HEADER */}
       <div
+        className="glass-divider"
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           padding: "18px 22px",
-          borderBottom: "1px solid #273549",
+          borderBottom: "1px solid",
         }}
       >
         <div
@@ -49,53 +49,56 @@ export default function CameraPanel({
             alignItems: "center",
           }}
         >
-          <Camera color={isCameraActive ? "#3B82F6" : "#64748B"} size={22} />
+          <Camera
+            color={isCameraActive ? "#2563EB" : "#94A3B8"}
+            size={22}
+          />
 
           <h2
             style={{
-              fontWeight: 700,
+              fontWeight: 750,
               fontSize: 18,
+              margin: 0,
+              color: "#0F172A",
             }}
           >
             Live Camera
           </h2>
         </div>
 
-        <div
+        <button
+          onClick={toggleCamera}
           style={{
+            background: isCameraActive ? "#10B981" : "#EF4444",
+            color: "#fff",
+            borderRadius: 999,
+            padding: "7px 15px",
+            fontWeight: 700,
+            fontSize: 13,
+            border: "none",
+            cursor: "pointer",
             display: "flex",
-            gap: 10,
+            alignItems: "center",
+            gap: 6,
+            boxShadow: `0 5px 18px ${
+              isCameraActive
+                ? "rgba(16,185,129,.25)"
+                : "rgba(239,68,68,.25)"
+            }`,
           }}
         >
-          <button
-            onClick={toggleCamera}
-            style={{
-              background: isCameraActive ? "#10B981" : "#EF4444",
-              color: "#fff",
-              borderRadius: 999,
-              padding: "6px 14px",
-              fontWeight: 700,
-              fontSize: 13,
-              border: "none",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px"
-            }}
-          >
-            <Power size={14} />
-            {isCameraActive ? "LIVE" : "OFFLINE"}
-          </button>
-        </div>
+          <Power size={14} />
+          {isCameraActive ? "LIVE" : "OFFLINE"}
+        </button>
       </div>
 
-      {/* Camera */}
+      {/* CAMERA */}
       <div
         style={{
           position: "relative",
           width: "100%",
           aspectRatio: "4 / 3",
-          background: "#000",
+          background: "#020617",
         }}
       >
         {isCameraActive ? (
@@ -131,34 +134,35 @@ export default function CameraPanel({
             />
           </>
         ) : (
-          <div style={{ 
-            position: "absolute", 
-            inset: 0, 
-            display: "flex", 
-            justifyContent: "center", 
-            alignItems: "center",
-            color: "#64748B",
-            flexDirection: "column",
-            gap: "12px"
-          }}>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "#CBD5E1",
+              flexDirection: "column",
+              gap: 12,
+            }}
+          >
             <Camera size={48} opacity={0.5} />
             <p>Camera is currently offline</p>
           </div>
         )}
 
-        {/* Gradient */}
         <div
           style={{
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(to top, rgba(0,0,0,.75), transparent 45%)",
+              "linear-gradient(to top, rgba(2,6,23,.78), transparent 45%)",
             zIndex: 20,
             pointerEvents: "none",
           }}
         />
 
-        {/* Bottom Left Status */}
+        {/* CAMERA STATUS */}
         <div
           style={{
             position: "absolute",
@@ -167,29 +171,29 @@ export default function CameraPanel({
             zIndex: 25,
             display: "flex",
             flexDirection: "column",
-            gap: 12,
+            gap: 10,
           }}
         >
           <GlassTag
             title="Camera"
             value={isCameraActive ? "Active" : "Offline"}
-            color={isCameraActive ? "#3B82F6" : "#EF4444"}
+            color={isCameraActive ? "#60A5FA" : "#EF4444"}
           />
 
           <GlassTag
             title="Model"
             value={isModelLoaded ? "Ready" : "Loading"}
-            color={isModelLoaded ? "#10B981" : "#F59E0B"}
+            color={isModelLoaded ? "#34D399" : "#F59E0B"}
           />
 
           <GlassTag
             title="FPS"
             value={isCameraActive ? "30" : "0"}
-            color={isCameraActive ? "#F59E0B" : "#64748B"}
+            color={isCameraActive ? "#FBBF24" : "#94A3B8"}
           />
         </div>
 
-        {/* Top Right */}
+        {/* VISION STATUS */}
         <div
           style={{
             position: "absolute",
@@ -200,27 +204,30 @@ export default function CameraPanel({
         >
           <div
             style={{
-              background: "rgba(17,24,39,.75)",
+              background: "rgba(15,23,42,.62)",
               backdropFilter: "blur(18px)",
-              border: "1px solid #334155",
+              WebkitBackdropFilter: "blur(18px)",
+              border: "1px solid rgba(255,255,255,.2)",
               borderRadius: 14,
-              padding: "12px 18px",
-              color: isCameraActive ? "#10B981" : "#64748B",
+              padding: "11px 16px",
+              color: isCameraActive ? "#34D399" : "#CBD5E1",
               fontWeight: 700,
             }}
           >
-            {isCameraActive ? "🟢 AI Vision Running" : "⚪ Vision Paused"}
+            {isCameraActive
+              ? "🟢 AI Vision Running"
+              : "⚪ Vision Paused"}
           </div>
         </div>
       </div>
 
-      {/* Footer */}
+      {/* BOTTOM INFO */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3,1fr)",
-          gap: 16,
-          padding: 20,
+          gap: 14,
+          padding: 18,
         }}
       >
         <InfoCard
@@ -257,18 +264,19 @@ function GlassTag({
   return (
     <div
       style={{
-        background: "rgba(17,24,39,.75)",
-        backdropFilter: "blur(18px)",
-        border: "1px solid #334155",
-        borderRadius: 14,
-        padding: "12px 18px",
-        minWidth: 140,
+        background: "rgba(15,23,42,.62)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        border: "1px solid rgba(255,255,255,.18)",
+        borderRadius: 12,
+        padding: "9px 15px",
+        minWidth: 125,
       }}
     >
       <div
         style={{
-          color: "#94A3B8",
-          fontSize: 12,
+          color: "#CBD5E1",
+          fontSize: 11,
         }}
       >
         {title}
@@ -298,17 +306,16 @@ function InfoCard({
 }) {
   return (
     <div
+      className="glass-card"
       style={{
-        background: "#1E293B",
-        border: "1px solid #334155",
         borderRadius: 16,
-        padding: 18,
+        padding: 16,
       }}
     >
       <div
         style={{
-          color: "#60A5FA",
-          marginBottom: 12,
+          color: "#2563EB",
+          marginBottom: 9,
         }}
       >
         {icon}
@@ -316,8 +323,8 @@ function InfoCard({
 
       <div
         style={{
-          color: "#94A3B8",
-          fontSize: 13,
+          color: "#64748B",
+          fontSize: 12,
         }}
       >
         {title}
@@ -325,8 +332,9 @@ function InfoCard({
 
       <div
         style={{
-          fontWeight: 700,
-          marginTop: 5,
+          color: "#0F172A",
+          fontWeight: 750,
+          marginTop: 4,
         }}
       >
         {value}

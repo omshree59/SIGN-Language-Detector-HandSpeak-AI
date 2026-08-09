@@ -1,40 +1,68 @@
 import { motion } from "framer-motion";
 import { Cpu, Activity, Sparkles } from "lucide-react";
 
-export default function Header() {
+interface HeaderProps {
+  backendStatus: "connecting" | "connected" | "offline";
+}
+
+export default function Header({ backendStatus }: HeaderProps) {
+  const statusColor =
+    backendStatus === "connected"
+      ? "#10B981"
+      : backendStatus === "connecting"
+      ? "#F59E0B"
+      : "#EF4444";
+
+  const statusTitle =
+    backendStatus === "connected"
+      ? "AI ONLINE"
+      : backendStatus === "connecting"
+      ? "CONNECTING..."
+      : "AI OFFLINE";
+
+  const statusSubtitle =
+    backendStatus === "connected"
+      ? "Backend Connected"
+      : backendStatus === "connecting"
+      ? "Connecting to Backend..."
+      : "Model Not Connected";
+
   return (
     <motion.header
-      initial={{ opacity: 0, y: -40 }}
+      initial={{ opacity: 0, y: -30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="card"
+      transition={{ duration: 0.45 }}
       style={{
-        padding: "28px 32px",
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "30px",
+        alignItems: "flex-start",
+        marginBottom: 28,
+        padding: "4px 4px",
+        color: "#0F172A",
       }}
     >
-      {/* Left */}
+      {/* LEFT */}
       <div>
         <h1
           style={{
-            fontSize: "2.3rem",
-            fontWeight: 800,
+            fontSize: "2.7rem",
+            fontWeight: 900,
             display: "flex",
             alignItems: "center",
-            gap: "12px",
+            gap: 12,
+            margin: 0,
+            letterSpacing: "-1.5px",
+            color: "#0F172A",
           }}
         >
-          🤟 HandSpeak AI
+          🤟 LexiCue
         </h1>
 
         <p
           style={{
-            marginTop: "8px",
-            color: "#94A3B8",
-            fontSize: "15px",
+            margin: "7px 0 0",
+            color: "#475569",
+            fontSize: 16,
           }}
         >
           Real-Time Sign Language Translation Platform
@@ -43,75 +71,73 @@ export default function Header() {
         <div
           style={{
             display: "flex",
-            gap: "12px",
-            marginTop: "18px",
+            gap: 24,
+            marginTop: 16,
             flexWrap: "wrap",
           }}
         >
           <TechBadge
-            icon={<Cpu size={16} />}
+            icon={<Cpu size={16} color="#2563EB" />}
             text="PyTorch"
           />
 
           <TechBadge
-            icon={<Sparkles size={16} />}
+            icon={<Sparkles size={16} color="#10B981" />}
             text="MediaPipe"
           />
 
           <TechBadge
-            icon={<Activity size={16} />}
+            icon={<Activity size={16} color="#8B5CF6" />}
             text="FastAPI"
           />
         </div>
       </div>
 
-      {/* Right */}
+      {/* RIGHT */}
       <div
-        className="glass"
         style={{
-          padding: "18px 26px",
-          borderRadius: "18px",
-          border: "1px solid #334155",
-          textAlign: "center",
-          minWidth: "180px",
+          textAlign: "right",
+          marginTop: 6,
         }}
       >
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "flex-end",
             alignItems: "center",
-            gap: "10px",
+            gap: 9,
           }}
         >
           <span
             style={{
-              width: 12,
-              height: 12,
+              width: 9,
+              height: 9,
               borderRadius: "50%",
-              background: "#10B981",
-              boxShadow: "0 0 12px #10B981",
+              background: statusColor,
+              boxShadow: `0 0 12px ${statusColor}`,
             }}
           />
 
           <span
             style={{
-              fontWeight: 700,
-              color: "#10B981",
+              color: "#0F172A",
+              fontWeight: 800,
+              fontSize: "1.45rem",
+              letterSpacing: "-0.4px",
             }}
           >
-            AI READY
+            {statusTitle}
           </span>
         </div>
 
         <p
           style={{
-            color: "#94A3B8",
-            marginTop: "8px",
-            fontSize: "13px",
+            color: "#64748B",
+            margin: "6px 0 0",
+            fontSize: 13,
           }}
         >
-          Model Loaded Successfully
+          {statusSubtitle}
         </p>
       </div>
     </motion.header>
@@ -130,14 +156,10 @@ function TechBadge({
       style={{
         display: "flex",
         alignItems: "center",
-        gap: "8px",
-        background: "#1E293B",
-        padding: "8px 14px",
-        borderRadius: "999px",
-        border: "1px solid #334155",
-        color: "#E2E8F0",
-        fontSize: "14px",
-        fontWeight: 600,
+        gap: 8,
+        color: "#334155",
+        fontSize: 14,
+        fontWeight: 650,
       }}
     >
       {icon}

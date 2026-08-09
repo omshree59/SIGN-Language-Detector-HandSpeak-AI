@@ -5,6 +5,7 @@ import CameraPanel from "./components/CameraPanel";
 import PredictionPanel from "./components/PredictionPanel";
 import SentencePanel from "./components/SentencePanel";
 import Footer from "./components/Footer";
+import Background from "./components/Background";
 
 
 
@@ -18,6 +19,9 @@ export default function App() {
 const animationFrameRef = useRef<number | null>(null);
 
   const [isModelLoaded, setIsModelLoaded] = useState(false);
+  const [backendStatus, setBackendStatus] = useState<
+  "connecting" | "connected" | "offline"
+>("connecting");
   const [currentSign, setCurrentSign] = useState<string>('-');
   const [confidence, setConfidence] = useState<number>(0);
   const [confidenceHistory, setConfidenceHistory] = useState<number[]>([]);
@@ -31,43 +35,74 @@ const animationFrameRef = useRef<number | null>(null);
   const HOLD_THRESHOLD = 15; // Requires ~0.5 seconds of holding the exact same sign
   const isCameraActiveRef = useRef(true);
 
-  useEffect(() => {
-    // Connect to Python Backend natively (removes the buggy library dependency)
-    const ws = new WebSocket(WS_URL);
-    
-    ws.onopen = () => console.log('Connected to Python WebSocket');
-    
+useEffect(() => {
+  let ws: WebSocket;
+
+  const connect = () => {
+    setBackendStatus("connecting");
+
+
+
+    ws = new WebSocket(WS_URL);
+    let reconnectTimer: ReturnType<typeof setTimeout>;
+
+    ws.onopen = () => {
+      console.log("Connected");
+      setBackendStatus("connected");
+    };
+
+    ws.onclose = () => {
+      console.log("Disconnected");
+      setBackendStatus("offline");
+
+      // Try again after 2 seconds
+      setTimeout(connect, 2000);
+    };
+
+    ws.onerror = () => {
+      setBackendStatus("offline");
+      ws.close();
+    };
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
+
       if (data.predicted_character) {
         setCurrentSign(data.predicted_character);
         setConfidence(data.confidence);
-        setConfidenceHistory((prev) => {
-  const updated = [...prev, data.confidence];
-  return updated.slice(-40); // Keep only last 40 values
-});
-        
-        // Hold Stabilizer Logic
-        if (data.predicted_character === stableCharRef.current && data.confidence > 80) {
-          holdCountRef.current += 1;
+
+        setConfidenceHistory(prev => {
+          const updated = [...prev, data.confidence];
+          return updated.slice(-40);
+        });
+
+        if (
+          data.predicted_character === stableCharRef.current &&
+          data.confidence > 80
+        ) {
+          holdCountRef.current++;
+
           if (holdCountRef.current === HOLD_THRESHOLD) {
-            setSentence((prev) => prev + data.predicted_character);
-            holdCountRef.current = 0; // Reset after appending
+            setSentence(prev => prev + data.predicted_character);
+            holdCountRef.current = 0;
           }
         } else {
           stableCharRef.current = data.predicted_character;
           holdCountRef.current = 0;
         }
+
         setUiHoldCount(holdCountRef.current);
       }
     };
-    
-    wsRef.current = ws;
 
-    return () => {
-      ws.close();
-    };
-  }, []);
+    wsRef.current = ws;
+  };
+
+  connect();
+
+  return () =>{}
+     clearTimeout(reconnectTimer); ws?.close();
+}, []);
 
   
     const initializeMediaPipe = async () => {
@@ -204,25 +239,58 @@ setIsCameraActive(false);
   await startCamera();
 }
 };
-  return (
+ return (
   <div
     style={{
+      position: "relative",
       minHeight: "100vh",
-      background: "#020617",
-      color: "#fff",
-      padding: "30px",
+      background: `
+        radial-gradient(
+          circle at top left,
+          rgba(59,130,246,.08),
+          transparent 35%
+        ),
+
+        radial-gradient(
+          circle at bottom right,
+          rgba(16,185,129,.06),
+          transparent 35%
+        ),
+
+        #F8FAFC
+      `,
+      overflow: "hidden",
     }}
   >
+
+    {/* =========================
+        FLOATING BACKGROUND
+        ========================= */}
+
+    <Background />
+
+
+    {/* =========================
+        MAIN WEBSITE CONTENT
+        ========================= */}
+
     <div
       style={{
+        position: "relative",
+        zIndex: 2,
+
         maxWidth: "1600px",
         margin: "0 auto",
+
+        padding: "30px",
       }}
     >
-      {/* Header */}
-      <Header />
+
+      <Header backendStatus={backendStatus} />
+
 
       {/* Main Dashboard */}
+
       <div
         style={{
           display: "grid",
@@ -231,7 +299,17 @@ setIsCameraActive(false);
           alignItems: "start",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+
+        {/* Left column */}
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "24px",
+          }}
+        >
+
           <CameraPanel
             videoRef={videoRef}
             canvasRef={canvasRef}
@@ -242,7 +320,7 @@ setIsCameraActive(false);
             toggleCamera={toggleCamera}
           />
 
-          {/* Sentence Builder */}
+
           <SentencePanel
             sentence={sentence}
             setSentence={setSentence}
@@ -250,7 +328,11 @@ setIsCameraActive(false);
             HOLD_THRESHOLD={HOLD_THRESHOLD}
             confidence={confidence}
           />
+
         </div>
+
+
+        {/* Right column */}
 
         <PredictionPanel
           currentSign={currentSign}
@@ -258,12 +340,15 @@ setIsCameraActive(false);
           confidenceHistory={confidenceHistory}
           isModelLoaded={isModelLoaded}
           isCameraActive={isCameraActive}
-/>
+        />
+
       </div>
 
-      {/* Footer */}
+
       <Footer />
+
     </div>
+
   </div>
 );
 }
