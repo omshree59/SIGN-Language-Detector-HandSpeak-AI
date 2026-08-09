@@ -81,6 +81,8 @@ const healthScore = !isCameraActive
         display: "flex",
         flexDirection: "column",
         gap: 24,
+        height: "100%",
+        justifyContent: "space-between",
       }}
     >
       {/* ================= HEADER ================= */}
@@ -146,14 +148,12 @@ const healthScore = !isCameraActive
           duration: 0.25,
         }}
         style={{
-          background:
-            "linear-gradient(135deg,#2563EB,#1E40AF,#1D4ED8)",
+          background: "linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.1))",
           borderRadius: 24,
           padding: 30,
           textAlign: "center",
-          border: `2px solid ${isCameraActive ? confidenceColor : "#334155"}`,
-          boxShadow:
-            "0 20px 45px rgba(37,99,235,.35)",
+          border: `2px solid ${isCameraActive ? confidenceColor : "rgba(148,163,184,0.3)"}`,
+          boxShadow: "0 10px 30px rgba(15,23,42,0.05)",
         }}
       >
         <p
@@ -161,6 +161,7 @@ const healthScore = !isCameraActive
             opacity: 0.85,
             letterSpacing: 2,
             fontSize: 13,
+            color: "#64748B",
           }}
         >
           CURRENT PREDICTION
@@ -184,6 +185,7 @@ const healthScore = !isCameraActive
             fontWeight: 900,
             lineHeight: 1,
             margin: "15px 0",
+            color: "#0F172A",
           }}
         >
           {isCameraActive ? currentSign : "-"}
@@ -193,6 +195,7 @@ const healthScore = !isCameraActive
           style={{
             fontSize: 36,
             fontWeight: 700,
+            color: "#3B82F6",
           }}
         >
           {isCameraActive ? `${confidence.toFixed(1)}%` : "0%"}
@@ -203,6 +206,7 @@ const healthScore = !isCameraActive
             marginTop: 10,
             opacity: 0.9,
             fontWeight: 600,
+            color: "#64748B",
           }}
         >
           {isCameraActive ? `${confidenceText} Prediction Confidence` : "Awaiting Camera Feed"}
@@ -212,7 +216,7 @@ const healthScore = !isCameraActive
       {/* ================= CONFIDENCE ================= */}
       <div
         style={{
-          background: "rgba(248,250,252,.90)",
+          background: "rgba(255,255,255,0.24)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
@@ -331,7 +335,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= SYSTEM HEALTH ================= */}
       <div
         style={{
-          background: "rgba(248,250,252,.90)",
+         background: "rgba(255,255,255,0.24)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
@@ -399,7 +403,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= AI HEALTH SCORE ================= */}
       <div
         style={{
-          background: "rgba(248,250,252,.90)",
+         background: "rgba(255,255,255,0.24)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
@@ -481,7 +485,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= CONFIDENCE HISTORY ================= */}
       <div
         style={{
-          background: "rgba(248,250,252,.90)",
+          background: "rgba(255,255,255,0.24)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,
@@ -521,9 +525,9 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
           style={{
             position: "relative",
             height: 170,
-            background: "#0F172A",
+            background: "rgba(255,255,255,0.4)",
             borderRadius: 16,
-            border: "1px solid rgba(255,255,255,.65)",
+            border: "1px solid rgba(148,163,184,.2)",
             overflow: "hidden",
           }}
         >
@@ -594,7 +598,7 @@ boxShadow: "0 8px 22px rgba(15,23,42,.045)",
       {/* ================= AI INSIGHTS ================= */}
       <div
         style={{
-          background: "rgba(248,250,252,.90)",
+          background: "rgba(255,255,255,0.24)",
 backdropFilter: "blur(16px)",
 WebkitBackdropFilter: "blur(16px)",
 borderRadius: 18,

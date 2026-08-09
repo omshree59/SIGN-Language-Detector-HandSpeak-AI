@@ -28,7 +28,6 @@ export default function CameraPanel({
       style={{
         overflow: "hidden",
         position: "relative",
-        borderRadius: 24,
       }}
     >
       {/* HEADER */}
@@ -99,6 +98,9 @@ export default function CameraPanel({
           width: "100%",
           aspectRatio: "4 / 3",
           background: "#020617",
+          borderRadius: 16,
+          overflow: "hidden",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
         }}
       >
         {isCameraActive ? (
@@ -207,7 +209,7 @@ export default function CameraPanel({
               background: "rgba(15,23,42,.62)",
               backdropFilter: "blur(18px)",
               WebkitBackdropFilter: "blur(18px)",
-              border: "1px solid rgba(255,255,255,.2)",
+              border: "1px solid rgba(255,255,255,.15)",
               borderRadius: 14,
               padding: "11px 16px",
               color: isCameraActive ? "#34D399" : "#CBD5E1",

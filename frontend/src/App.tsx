@@ -247,17 +247,17 @@ setIsCameraActive(false);
       background: `
         radial-gradient(
           circle at top left,
-          rgba(59,130,246,.08),
+          rgba(249, 115, 22, 0.12),
           transparent 35%
         ),
 
         radial-gradient(
           circle at bottom right,
-          rgba(16,185,129,.06),
+          rgba(234, 88, 12, 0.1),
           transparent 35%
         ),
 
-        #F8FAFC
+        #FFF7ED
       `,
       overflow: "hidden",
     }}
@@ -296,7 +296,7 @@ setIsCameraActive(false);
           display: "grid",
           gridTemplateColumns: "1.7fr 1fr",
           gap: "24px",
-          alignItems: "start",
+          alignItems: "stretch",
         }}
       >
 

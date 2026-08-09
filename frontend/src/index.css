@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.glass-panel {
+  background: linear-gradient(135deg, rgba(253, 186, 116, 0.65), rgba(251, 146, 60, 0.65));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 237, 213, 0.6);
+  box-shadow: 0 12px 35px rgba(234, 88, 12, 0.15);
+  border-radius: 24px;
+}
+
+.glass-divider {
+  border-bottom: 1px solid rgba(234, 88, 12, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(251, 146, 60, 0.4);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.06);
+}

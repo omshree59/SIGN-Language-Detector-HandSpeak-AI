@@ -48,6 +48,8 @@ export default function SentencePanel({
         display: "flex",
         flexDirection: "column",
         gap: 24,
+        flex: 1,
+        justifyContent: "space-between",
       }}
     >
       {/* ================= HEADER ================= */}
@@ -111,18 +113,18 @@ export default function SentencePanel({
           scale: 1.01,
         }}
         style={{
-          background: "rgba(255,255,255,.96)",
-backdropFilter: "blur(16px)",
-WebkitBackdropFilter: "blur(16px)",
-border: "1px solid rgba(148,163,184,.18)",
-boxShadow: "inset 0 1px 0 rgba(255,255,255,.95)",
-          borderRadius: 22,
-          padding: 25,
-          minHeight: 220,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
+  background: "rgba(255,255,255,0.24)",
+  backdropFilter: "blur(12px)",
+  WebkitBackdropFilter: "blur(12px)",
+  border: "1px solid rgba(148,163,184,0.22)",
+  boxShadow: "0 8px 22px rgba(15,23,42,0.04)",
+  borderRadius: 22,
+  padding: 25,
+  minHeight: 220,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+}}
       >
         <div
           style={{
@@ -566,17 +568,17 @@ function StatusCard({
         scale: 1.03,
       }}
       style={{
-        background: "#172033",
-border: "1px solid rgba(255,255,255,.10)",
-borderRadius: 15,
-padding: 16,
-textAlign: "center",
-boxShadow: "0 8px 20px rgba(15,23,42,.10)",
+        background: "rgba(255,255,255,.9)",
+        border: "1px solid rgba(148,163,184,.2)",
+        borderRadius: 15,
+        padding: 16,
+        textAlign: "center",
+        boxShadow: "0 8px 20px rgba(15,23,42,.05)",
       }}
     >
       <div
         style={{
-          color: "#CBD5E1",
+          color: "#64748B",
           fontSize: 13,
         }}
       >
