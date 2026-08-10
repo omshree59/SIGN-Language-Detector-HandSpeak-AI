@@ -87,10 +87,14 @@ def predict_sign(landmarks_list):
                     best_dist = dist
                     best_word = word
         
-        # Threshold for similarity (approx 0.45 for 63 normalized coords)
-        if best_word and best_dist < 0.45:
-            # Map distance (0.0 to 0.45) to confidence (100% to ~50%)
-            conf = max(0, 100 - (best_dist * 100))
+        # Threshold for similarity (approx 0.85 for 63 normalized coords is a good sweet spot for slight variations)
+        # We will also print the best distance to the console to help debug
+        if best_word:
+            print(f"Closest custom sign: {best_word} (Distance: {best_dist:.3f})")
+            
+        if best_word and best_dist < 0.85:
+            # Map distance (0.0 to 0.85) to confidence (100% to ~50%)
+            conf = max(0, 100 - (best_dist * 58))
             return best_word, round(conf, 2)
 
         # B. Fallback to PyTorch Base Model
