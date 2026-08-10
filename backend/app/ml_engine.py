@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import numpy as np
 import os
+import json
+import math
 
 # 1. Recreate the exact architecture from your training script
 class ASLModel(nn.Module):
@@ -46,24 +48,57 @@ try:
 except Exception as e:
     print(f"❌ Error loading model weights: {e}")
 
-# 3. Create the prediction function
+# 3. Custom Sign Dictionary Logic
+CUSTOM_SIGNS_FILE = os.path.join("ml", "custom_signs.json")
+
+def load_custom_signs():
+    if os.path.exists(CUSTOM_SIGNS_FILE):
+        try:
+            with open(CUSTOM_SIGNS_FILE, "r") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+custom_signs = load_custom_signs()
+
+def teach_custom_sign(word, landmarks):
+    custom_signs[word] = landmarks
+    with open(CUSTOM_SIGNS_FILE, "w") as f:
+        json.dump(custom_signs, f)
+
+def euclidean_distance(l1, l2):
+    return math.sqrt(sum((a - b) ** 2 for a, b in zip(l1, l2)))
+
+# 4. Create the prediction function
 def predict_sign(landmarks_list):
     """
-    Takes a list of 63 normalized coordinates, feeds them to PyTorch,
-    and returns the predicted letter and confidence score.
+    Takes a list of 63 normalized coordinates, checks custom signs first,
+    then feeds them to PyTorch, and returns the predicted letter and confidence score.
     """
     try:
-        # Convert the python list into a PyTorch tensor
+        # A. Check Custom Signs (Nearest Neighbor)
+        best_dist = float('inf')
+        best_word = None
+        for word, stored_lm in custom_signs.items():
+            if len(stored_lm) == len(landmarks_list):
+                dist = euclidean_distance(landmarks_list, stored_lm)
+                if dist < best_dist:
+                    best_dist = dist
+                    best_word = word
+        
+        # Threshold for similarity (approx 0.45 for 63 normalized coords)
+        if best_word and best_dist < 0.45:
+            # Map distance (0.0 to 0.45) to confidence (100% to ~50%)
+            conf = max(0, 100 - (best_dist * 100))
+            return best_word, round(conf, 2)
+
+        # B. Fallback to PyTorch Base Model
         tensor_data = torch.FloatTensor([landmarks_list])
         
-        # Turn off gradient calculation for faster inference
         with torch.no_grad():
             outputs = model(tensor_data)
-            
-            # Apply softmax to get percentages (0.0 to 1.0)
             probabilities = torch.nn.functional.softmax(outputs, dim=1)
-            
-            # Get the highest probability and its corresponding index
             confidence, predicted_idx = torch.max(probabilities, 1)
             
             letter = ALPHABET[predicted_idx.item()]
@@ -71,4 +106,5 @@ def predict_sign(landmarks_list):
             
             return letter, conf_score
     except Exception as e:
+        print(f"Prediction error: {e}")
         return None, 0.0

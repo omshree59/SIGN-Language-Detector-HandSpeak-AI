@@ -21,6 +21,19 @@ app.add_middleware(
 class SentenceRequest(BaseModel):
     raw_sentence: str
 
+class TeachRequest(BaseModel):
+    word: str
+    landmarks: list[float]
+
+@app.post("/api/teach-sign")
+def teach_sign(request: TeachRequest):
+    from app.ml_engine import teach_custom_sign
+    if len(request.landmarks) != 63:
+        return {"error": "Invalid landmarks length. Expected 63."}
+    
+    teach_custom_sign(request.word, request.landmarks)
+    return {"message": f"Successfully taught the sign for '{request.word}'!"}
+
 @app.post("/api/convert-sentence")
 def convert_sentence(request: SentenceRequest):
     # wordninja probabilistically splits concatenated words
