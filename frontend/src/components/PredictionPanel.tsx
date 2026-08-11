@@ -414,15 +414,15 @@ boxShadow: "0 8px 22px rgba(0,0,0,.2)",
         <StatusRow
           icon={<Wifi size={18} />}
           title="WebSocket"
-          value="Connected"
-          color="#3B82F6"
+          value={backendStatus === "connected" ? "Connected" : backendStatus === "connecting" ? "Connecting" : "Disconnected"}
+          color={backendStatus === "connected" ? "#3B82F6" : backendStatus === "connecting" ? "#F59E0B" : "#EF4444"}
         />
 
         <StatusRow
           icon={<CheckCircle2 size={18} />}
           title="Backend"
-          value="Online"
-          color="#10B981"
+          value={backendStatus === "connected" ? "Online" : backendStatus === "connecting" ? "Waiting..." : "Offline"}
+          color={backendStatus === "connected" ? "#10B981" : backendStatus === "connecting" ? "#F59E0B" : "#EF4444"}
         />
         
         <StatusRow

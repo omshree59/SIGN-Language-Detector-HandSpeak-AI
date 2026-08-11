@@ -403,6 +403,7 @@ setIsCameraActive(false);
           confidenceHistory={confidenceHistory}
           isModelLoaded={isModelLoaded}
           isCameraActive={isCameraActive}
+          backendStatus={backendStatus}
         />
 
       </div>
