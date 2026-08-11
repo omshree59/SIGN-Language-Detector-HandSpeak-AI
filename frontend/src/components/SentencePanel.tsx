@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 import type {
@@ -14,6 +15,9 @@ import {
   FileText,
   Sparkles,
   Wand2,
+  Brain,
+  Map,
+  X,
 } from "lucide-react";
 
 interface SentencePanelProps {
@@ -23,6 +27,10 @@ interface SentencePanelProps {
   HOLD_THRESHOLD: number;
   confidence: number;
   isCameraActive: boolean;
+  isTeachingUI?: boolean;
+  setIsTeachingUI?: Dispatch<SetStateAction<boolean>>;
+  startTeaching?: (word: string) => void;
+  teachingFramesCount?: number;
 }
 
 export default function SentencePanel({
@@ -32,7 +40,11 @@ export default function SentencePanel({
   HOLD_THRESHOLD,
   confidence,
   isCameraActive,
+  isTeachingUI,
+  startTeaching,
 }: SentencePanelProps) {
+  const [teachInput, setTeachInput] = useState("");
+  const [showMap, setShowMap] = useState(false);
   const characters = sentence.length;
 
   const words =
@@ -87,11 +99,11 @@ export default function SentencePanel({
 
         <motion.div
           animate={{
-            scale: isCameraActive ? [1, 1.05, 1] : 1,
+            scale: isTeachingUI ? [1, 1.1, 1] : (isCameraActive ? [1, 1.05, 1] : 1),
           }}
           transition={{
             repeat: Infinity,
-            duration: 2,
+            duration: isTeachingUI ? 1 : 2,
           }}
           style={{
             display: "flex",
@@ -99,16 +111,78 @@ export default function SentencePanel({
             alignItems: "center",
             padding: "10px 18px",
             borderRadius: 999,
-            background: isCameraActive ? "rgba(249,115,22,0.15)" : "rgba(100,116,139,0.15)",
-            border: isCameraActive ? "1px solid rgba(249,115,22,0.4)" : "1px solid rgba(100,116,139,0.4)",
-            color: isCameraActive ? "#FB923C" : "#64748B",
+            background: isTeachingUI ? "rgba(239,68,68,0.15)" : (isCameraActive ? "rgba(249,115,22,0.15)" : "rgba(100,116,139,0.15)"),
+            border: isTeachingUI ? "1px solid rgba(239,68,68,0.4)" : (isCameraActive ? "1px solid rgba(249,115,22,0.4)" : "1px solid rgba(100,116,139,0.4)"),
+            color: isTeachingUI ? "#EF4444" : (isCameraActive ? "#FB923C" : "#64748B"),
             fontWeight: 700,
           }}
         >
           <Sparkles size={18} />
-          {isCameraActive ? "LIVE" : "PAUSED"}
+          {isTeachingUI ? "RECORDING..." : (isCameraActive ? "LIVE" : "PAUSED")}
         </motion.div>
       </div>
+
+      {/* ================= CHEAT SHEET MODAL ================= */}
+      {showMap && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.6)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={() => setShowMap(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            style={{
+              background: "#FFF",
+              padding: 24,
+              borderRadius: 24,
+              maxWidth: 900,
+              width: "90%",
+              maxHeight: "90vh",
+              overflow: "auto",
+              position: "relative",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowMap(false)}
+              style={{
+                position: "absolute",
+                top: 20,
+                right: 20,
+                background: "rgba(0,0,0,0.05)",
+                border: "none",
+                borderRadius: "50%",
+                width: 40,
+                height: 40,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <X size={24} color="#431407" />
+            </button>
+            <h2 style={{ color: "#431407", marginBottom: 20, fontSize: 24 }}>ASL Alphabet Reference</h2>
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Asl_alphabet_gallaudet.svg/1024px-Asl_alphabet_gallaudet.svg.png" 
+              alt="ASL Alphabet Cheat Sheet" 
+              style={{ width: "100%", borderRadius: 12 }} 
+            />
+          </motion.div>
+        </div>
+      )}
 
       {/* ================= EDITOR ================= */}
 
@@ -156,12 +230,59 @@ export default function SentencePanel({
           <span>{words} Words</span>
         </div>
       </motion.div>
-            {/* ================= ACTION BUTTONS ================= */}
+      {/* ================= TEACH MODE ================= */}
+      <div style={{ display: "flex", gap: 12 }}>
+        <input
+          value={teachInput}
+          onChange={(e) => setTeachInput(e.target.value)}
+          placeholder="Type a custom word to teach the AI..."
+          style={{
+            flex: 1,
+            padding: "14px 18px",
+            borderRadius: 15,
+            border: "1px solid rgba(139, 92, 246, 0.3)",
+            background: "rgba(255,255,255,0.6)",
+            color: "#431407",
+            fontWeight: 600,
+            outline: "none",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+            fontSize: 15,
+          }}
+        />
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => {
+            if (teachInput.trim() && startTeaching) {
+              startTeaching(teachInput.trim());
+              setTeachInput("");
+            }
+          }}
+          style={{
+            background: "linear-gradient(135deg, #8B5CF6, #6D28D9)",
+            color: "#FFF",
+            border: "none",
+            borderRadius: 15,
+            padding: "0 24px",
+            fontWeight: 700,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            boxShadow: "0 6px 16px rgba(109, 40, 217, 0.3)",
+          }}
+        >
+          <Brain size={18} />
+          Start Teaching
+        </motion.button>
+      </div>
+
+      {/* ================= ACTION BUTTONS ================= */}
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(6,1fr)",
+          gridTemplateColumns: "repeat(7,1fr)",
           gap: 16,
         }}
       >
@@ -228,29 +349,29 @@ speechSynthesis.speak(utterance);
           onClick={() => setSentence("")}
         />
 
-       <ActionButton
-  icon={<FileText size={20} />}
-  title="Export"
-  color="#8B5CF6"
-  onClick={() => {
-    if (!sentence.trim()) return;
+        <ActionButton
+          icon={<FileText size={20} />}
+          title="Export"
+          color="#8B5CF6"
+          onClick={() => {
+            if (!sentence.trim()) return;
 
-    const blob = new Blob([sentence], {
-      type: "text/plain",
-    });
+            const blob = new Blob([sentence], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "translation.txt";
+            a.click();
+            URL.revokeObjectURL(url);
+          }}
+        />
 
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-
-    a.href = url;
-    a.download = "translation.txt";
-    a.click();
-
-    URL.revokeObjectURL(url);
-  }}
-/>
-
+        <ActionButton
+          icon={<Map size={20} />}
+          title="Map"
+          color="#14B8A6"
+          onClick={() => setShowMap(true)}
+        />
       </div>
 
       {/* ================= QUICK INFO ================= */}

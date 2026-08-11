@@ -35,13 +35,18 @@ const animationFrameRef = useRef<number | null>(null);
   const HOLD_THRESHOLD = 15; // Requires ~0.5 seconds of holding the exact same sign
   const isCameraActiveRef = useRef(true);
 
+  // Teach Mode State
+  const isTeachingRef = useRef<boolean>(false);
+  const teachingWordRef = useRef<string>('');
+  const teachingFramesRef = useRef<number[][]>([]);
+  const [isTeachingUI, setIsTeachingUI] = useState<boolean>(false);
+  const lastAddedWordTimeRef = useRef<number>(0);
+
 useEffect(() => {
   let ws: WebSocket;
 
   const connect = () => {
     setBackendStatus("connecting");
-
-
 
     ws = new WebSocket(WS_URL);
     let reconnectTimer: ReturnType<typeof setTimeout>;
@@ -76,22 +81,40 @@ useEffect(() => {
           return updated.slice(-40);
         });
 
-        if (
-          data.predicted_character === stableCharRef.current &&
-          data.confidence > 80
-        ) {
-          holdCountRef.current++;
+        const isCustomWord = data.predicted_character.length > 1;
 
-          if (holdCountRef.current === HOLD_THRESHOLD) {
-            setSentence(prev => prev + data.predicted_character);
-            holdCountRef.current = 0;
+        if (isCustomWord) {
+          // 🚀 For custom shaky signs: Trigger instantly on match, but enforce a 2-second cooldown
+          if (Date.now() - lastAddedWordTimeRef.current > 2000) {
+            setSentence(prev => {
+              const char = data.predicted_character;
+              return prev + (prev.endsWith(" ") || prev === "" ? "" : " ") + char + " ";
+            });
+            lastAddedWordTimeRef.current = Date.now();
+            
+            // Give UI a quick visual bump for custom words
+            setUiHoldCount(HOLD_THRESHOLD);
+            setTimeout(() => setUiHoldCount(0), 500);
           }
         } else {
-          stableCharRef.current = data.predicted_character;
-          holdCountRef.current = 0;
-        }
+          // 🐢 For standard A-Z static letters: Require 15 consecutive frames (stable holding)
+          if (
+            data.predicted_character === stableCharRef.current &&
+            data.confidence > 80
+          ) {
+            holdCountRef.current++;
 
-        setUiHoldCount(holdCountRef.current);
+            if (holdCountRef.current === HOLD_THRESHOLD) {
+              setSentence(prev => prev + data.predicted_character);
+              holdCountRef.current = 0;
+              lastAddedWordTimeRef.current = Date.now(); // reset cooldown just in case
+            }
+          } else {
+            stableCharRef.current = data.predicted_character;
+            holdCountRef.current = 0;
+          }
+          setUiHoldCount(holdCountRef.current);
+        }
       }
     };
 
@@ -197,9 +220,37 @@ handLandmarkerRef.current.detectForVideo(
           });
         }
         
-        // Send exactly 63 coordinates to Python
-        if (flatList.length === 63 && wsRef.current?.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ landmarks: flatList }));
+        // If teaching, accumulate frames. Otherwise, send to WebSocket.
+        if (flatList.length === 63) {
+          if (isTeachingRef.current) {
+            teachingFramesRef.current.push(flatList);
+            // 60 frames = approx 2 seconds of holding the sign
+            if (teachingFramesRef.current.length >= 60) {
+              const avgLandmarks = teachingFramesRef.current[0].map((_, i) => 
+                teachingFramesRef.current.reduce((sum, frame) => sum + frame[i], 0) / 60
+              );
+              
+              isTeachingRef.current = false;
+              setIsTeachingUI(false);
+              
+              fetch("http://127.0.0.1:8000/api/teach-sign", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                  word: teachingWordRef.current, 
+                  landmarks: avgLandmarks 
+                })
+              }).then(res => res.json()).then(data => {
+                console.log("Teaching success:", data);
+                teachingFramesRef.current = [];
+              }).catch(err => {
+                console.error("Teaching failed:", err);
+                teachingFramesRef.current = [];
+              });
+            }
+          } else if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify({ landmarks: flatList }));
+          }
         }
       }
       
@@ -329,6 +380,16 @@ setIsCameraActive(false);
             HOLD_THRESHOLD={HOLD_THRESHOLD}
             confidence={confidence}
             isCameraActive={isCameraActive}
+            
+            isTeachingUI={isTeachingUI}
+            setIsTeachingUI={setIsTeachingUI}
+            startTeaching={(word) => {
+              teachingWordRef.current = word;
+              teachingFramesRef.current = [];
+              isTeachingRef.current = true;
+              setIsTeachingUI(true);
+            }}
+            teachingFramesCount={isTeachingUI ? 0 : 0} 
           />
 
         </div>
