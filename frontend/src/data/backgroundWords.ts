@@ -85,7 +85,7 @@ export const backgroundWords = [
 
   {
     word: "GOOD",
-    top: "82%",
+    top: "74%",
     left: "9%",
     scale: 0.76,
     duration: 73,
@@ -93,7 +93,7 @@ export const backgroundWords = [
 
   {
     word: "WELCOME",
-    top: "83%",
+    top: "75%",
     left: "60%",
     scale: 0.58,
     duration: 82,
