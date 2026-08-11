@@ -176,7 +176,7 @@ export default function SentencePanel({
             </button>
             <h2 style={{ color: "#431407", marginBottom: 20, fontSize: 24 }}>ASL Alphabet Reference</h2>
             <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Asl_alphabet_gallaudet.svg/1024px-Asl_alphabet_gallaudet.svg.png" 
+              src="/asl_map.png" 
               alt="ASL Alphabet Cheat Sheet" 
               style={{ width: "100%", borderRadius: 12 }} 
             />
