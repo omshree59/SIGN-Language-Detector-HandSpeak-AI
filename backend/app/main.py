@@ -42,14 +42,71 @@ def teach_sign(request: TeachRequest):
     teach_custom_sign(request.word, request.landmarks)
     return {"message": f"Successfully taught the sign for '{request.word}'!"}
 
+def smooth_asl_grammar(words):
+    import nltk
+    if not words:
+        return ""
+    try:
+        tagged = nltk.pos_tag(words)
+    except Exception:
+        return " ".join(words)
+        
+    # Rule 1: OSV (Object-Subject-Verb) -> SVO (Subject-Verb-Object)
+    # ASL: "store i go" -> "i go to the store"
+    if len(tagged) == 3:
+        if tagged[0][1].startswith('N') and tagged[1][1].startswith('PRP') and tagged[2][1].startswith('V'):
+            obj = tagged[0][0]
+            subj = tagged[1][0]
+            verb = tagged[2][0]
+            if verb.lower() in ['go', 'walk', 'run', 'drive', 'travel', 'move']:
+                return f"{subj} {verb} to the {obj}"
+            else:
+                return f"{subj} {verb} the {obj}"
+
+    # Rule 2: Noun + Adjective -> Adjective + Noun
+    # ASL: "car red" -> "red car"
+    if len(tagged) == 2:
+        if tagged[0][1].startswith('N') and tagged[1][1].startswith('JJ'):
+            return f"{tagged[1][0]} {tagged[0][0]}"
+
+    # Rule 3: Pronoun + Adjective (Missing "to be" verbs)
+    # ASL: "i happy" -> "i am happy"
+    if len(tagged) == 2:
+        if tagged[0][1].startswith('PRP') and tagged[1][1].startswith('JJ'):
+            pronoun = tagged[0][0].lower()
+            if pronoun == 'i':
+                verb = 'am'
+            elif pronoun in ['he', 'she', 'it']:
+                verb = 'is'
+            else:
+                verb = 'are'
+            return f"{tagged[0][0]} {verb} {tagged[1][0]}"
+
+    # Rule 4: Pronoun + Noun (Missing "to be" and article)
+    # ASL: "he doctor" -> "he is a doctor"
+    if len(tagged) == 2:
+        if tagged[0][1].startswith('PRP') and tagged[1][1].startswith('N'):
+            pronoun = tagged[0][0].lower()
+            if pronoun == 'i':
+                verb = 'am a'
+            elif pronoun in ['he', 'she', 'it']:
+                verb = 'is a'
+            else:
+                verb = 'are'
+            return f"{tagged[0][0]} {verb} {tagged[1][0]}"
+
+    # Fallback to just joining the words
+    return " ".join(words)
+
 @app.post("/api/convert-sentence")
 def convert_sentence(request: SentenceRequest):
-    # wordninja probabilistically splits concatenated words
-    # e.g., "iamgoodboy" -> ["i", "am", "good", "boy"]
+    # 1. Split concatenated letters into words (e.g. "storeigo" -> ["store", "i", "go"])
     words = wordninja.split(request.raw_sentence.lower())
     
-    # Capitalize the first letter of the sentence, keep the rest lower
-    sentence = " ".join(words)
+    # 2. Smooth the ASL grammar into English grammar
+    sentence = smooth_asl_grammar(words)
+    
+    # 3. Capitalize the first letter
     if sentence:
         sentence = sentence[0].upper() + sentence[1:]
         
