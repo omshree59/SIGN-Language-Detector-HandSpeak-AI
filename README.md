@@ -21,9 +21,10 @@ While some AI translation tools exist, they almost always rely on **cloud APIs**
 
 ## 📸 Screenshots
 
-*(Replace this placeholder with a screenshot of your beautiful dashboard!)*
-> **Tip:** Take a screenshot of your browser and save it as `screenshot.png` in your root folder!
-> `![Dashboard](screenshot.png)`
+<div align="center">
+  <img src="screenshot.png" alt="LexiCue Dashboard Screenshot" style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 100%; max-width: 900px;" />
+  <p><i>The LexiCue UI in action, seamlessly detecting hand landmarks and predicting signs in real-time.</i></p>
+</div>
 
 ---
 
