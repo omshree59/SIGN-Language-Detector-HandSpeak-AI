@@ -7,6 +7,9 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 # --- 1. Dataset Setup ---
 DATA_FILE = 'backend/ml/landmarks_dataset.csv'
@@ -129,6 +132,11 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 epochs = 300
 print(f"Starting training for {epochs} epochs...")
 
+train_losses = []
+val_losses = []
+train_accs = []
+val_accs = []
+
 for epoch in range(epochs):
     model.train()
     total_loss = 0
@@ -154,9 +162,29 @@ for epoch in range(epochs):
     epoch_loss = total_loss / len(train_loader)
     epoch_acc = (correct / len(train_dataset)) * 100
     
+    # Validation step
+    model.eval()
+    v_loss = 0
+    v_correct = 0
+    with torch.no_grad():
+        for features, labels in test_loader:
+            outputs = model(features)
+            loss = criterion(outputs, labels)
+            v_loss += loss.item()
+            _, predicted = torch.max(outputs.data, 1)
+            v_correct += (predicted == labels).sum().item()
+            
+    epoch_v_loss = v_loss / len(test_loader)
+    epoch_v_acc = (v_correct / len(test_dataset)) * 100
+    
+    train_losses.append(epoch_loss)
+    train_accs.append(epoch_acc)
+    val_losses.append(epoch_v_loss)
+    val_accs.append(epoch_v_acc)
+    
     # Print an update every 10 epochs
     if (epoch + 1) % 10 == 0 or epoch == 0:
-        print(f"Epoch [{epoch+1}/{epochs}] | Loss: {epoch_loss:.4f} | Accuracy: {epoch_acc:.2f}%")
+        print(f"Epoch [{epoch+1}/{epochs}] | Loss: {epoch_loss:.4f} | Accuracy: {epoch_acc:.2f}% | Val Loss: {epoch_v_loss:.4f} | Val Acc: {epoch_v_acc:.2f}%")
 
 # --- 4. Testing and Saving ---
 model.eval()
@@ -173,3 +201,44 @@ print(f"\nTraining Complete! Final Test Accuracy: {test_acc:.2f}%")
 # Save the trained brain (weights)
 torch.save(model.state_dict(), MODEL_PATH)
 print(f"Model saved to {MODEL_PATH}")
+
+# --- 5. Generate and Save Plots ---
+STATIC_DIR = 'backend/app/static'
+os.makedirs(STATIC_DIR, exist_ok=True)
+
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+plt.plot(train_losses, label='Train Loss')
+plt.plot(val_losses, label='Validation Loss')
+plt.title('Loss over Epochs')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(train_accs, label='Train Accuracy')
+plt.plot(val_accs, label='Validation Accuracy')
+plt.title('Accuracy over Epochs')
+plt.legend()
+plt.tight_layout()
+plt.savefig(os.path.join(STATIC_DIR, 'metrics_graph.png'))
+plt.close()
+
+model.eval()
+all_preds = []
+all_labels = []
+with torch.no_grad():
+    for features, labels in test_loader:
+        outputs = model(features)
+        _, predicted = torch.max(outputs.data, 1)
+        all_preds.extend(predicted.numpy())
+        all_labels.extend(labels.numpy())
+
+cm = confusion_matrix(all_labels, all_preds)
+plt.figure(figsize=(12, 10))
+sns.heatmap(cm, annot=False, fmt='d', cmap='Blues', xticklabels=label_encoder.classes_, yticklabels=label_encoder.classes_)
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.tight_layout()
+plt.savefig(os.path.join(STATIC_DIR, 'confusion_matrix.png'))
+plt.close()
+print(f"Saved metrics graphs to {STATIC_DIR}")

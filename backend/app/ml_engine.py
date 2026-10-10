@@ -106,6 +106,31 @@ def predict_sign(landmarks_list):
             confidence, predicted_idx = torch.max(probabilities, 1)
             
             letter = ALPHABET[predicted_idx.item()]
+            
+            # --- Heuristic Rule for D, L, and Z ---
+            if letter in ['D', 'L', 'Z']:
+                # Thumb tip is landmark 4 (indices 12:15)
+                thumb_tip = landmarks_list[12:15]
+                # Middle finger tip is landmark 12 (indices 36:39)
+                middle_tip = landmarks_list[36:39]
+                # Index finger tip is landmark 8 (indices 24:27)
+                index_tip = landmarks_list[24:27]
+                
+                dist_thumb_to_middle = euclidean_distance(thumb_tip, middle_tip)
+                index_y = index_tip[1] # Y coordinate of index tip (relative to wrist at 0, negative is UP)
+                
+                # In 'L', the thumb is extended horizontally away from the palm (distance is large)
+                if dist_thumb_to_middle > 0.25:
+                    letter = 'L'
+                else:
+                    # Both 'D' and 'Z' have the thumb curled in.
+                    # 'D' points the index finger straight UP (highly negative Y)
+                    # 'Z' points the index finger FORWARD/DIAGONAL (Y is closer to 0)
+                    if index_y < -0.55:
+                        letter = 'D'
+                    else:
+                        letter = 'Z'
+            
             conf_score = round(confidence.item() * 100, 2)
             
             return letter, conf_score

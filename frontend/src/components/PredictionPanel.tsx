@@ -781,7 +781,7 @@ function Insight({ text, color }: InsightProps) {
           boxShadow: `0 0 10px ${color}`,
         }}
       />
-      <span style={{ color: "#D6D3D1", fontSize: 14 }}>{text}</span>
+      <span style={{ color: "#78350F", fontSize: 14 }}>{text}</span>
     </motion.div>
   );
 }

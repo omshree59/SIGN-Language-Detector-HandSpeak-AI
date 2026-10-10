@@ -18,6 +18,9 @@ import {
   Brain,
   Map,
   X,
+  LineChart,
+  Activity,
+  BookOpen,
 } from "lucide-react";
 
 interface SentencePanelProps {
@@ -45,6 +48,9 @@ export default function SentencePanel({
 }: SentencePanelProps) {
   const [teachInput, setTeachInput] = useState("");
   const [showMap, setShowMap] = useState(false);
+  const [showMetrics, setShowMetrics] = useState(false);
+  const [showDictionary, setShowDictionary] = useState(false);
+  const [dictionaryData, setDictionaryData] = useState<{word: string, definition: string}[]>([]);
   const characters = sentence.length;
 
   const words =
@@ -184,6 +190,156 @@ export default function SentencePanel({
         </div>
       )}
 
+      {/* ================= METRICS MODAL ================= */}
+      {showMetrics && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.6)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={() => setShowMetrics(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            style={{
+              background: "#FFF",
+              padding: 32,
+              borderRadius: 24,
+              maxWidth: 900,
+              width: "90%",
+              maxHeight: "90vh",
+              overflow: "auto",
+              position: "relative",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowMetrics(false)}
+              style={{
+                position: "absolute",
+                top: 20,
+                right: 20,
+                background: "rgba(0,0,0,0.05)",
+                border: "none",
+                borderRadius: "50%",
+                width: 40,
+                height: 40,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <X size={24} color="#431407" />
+            </button>
+            <h2 style={{ color: "#431407", marginBottom: 20, fontSize: 26, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Activity size={28} color="#F97316" />
+              PyTorch Model Performance Metrics
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+              <div>
+                <h3 style={{ color: "#78350F", marginBottom: 12, fontSize: 18 }}>Training & Validation Accuracy/Loss</h3>
+                <img 
+                  src="http://127.0.0.1:8000/static/metrics_graph.png" 
+                  alt="Accuracy and Loss Graphs" 
+                  style={{ width: "100%", borderRadius: 12, border: '1px solid #E5E7EB' }} 
+                />
+              </div>
+              <div>
+                <h3 style={{ color: "#78350F", marginBottom: 12, fontSize: 18 }}>Confusion Matrix</h3>
+                <img 
+                  src="http://127.0.0.1:8000/static/confusion_matrix.png" 
+                  alt="Confusion Matrix" 
+                  style={{ width: "100%", borderRadius: 12, border: '1px solid #E5E7EB' }} 
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ================= DICTIONARY MODAL ================= */}
+      {showDictionary && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.6)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={() => setShowDictionary(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            style={{
+              background: "#FFF",
+              padding: 32,
+              borderRadius: 24,
+              maxWidth: 600,
+              width: "90%",
+              maxHeight: "80vh",
+              overflow: "auto",
+              position: "relative",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowDictionary(false)}
+              style={{
+                position: "absolute",
+                top: 20,
+                right: 20,
+                background: "rgba(0,0,0,0.05)",
+                border: "none",
+                borderRadius: "50%",
+                width: 40,
+                height: 40,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <X size={24} color="#431407" />
+            </button>
+            <h2 style={{ color: "#431407", marginBottom: 24, fontSize: 26, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <BookOpen size={28} color="#8B5CF6" />
+              Word Meanings
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {dictionaryData.length === 0 ? (
+                <p style={{ color: "#78350F" }}>Loading definitions...</p>
+              ) : (
+                dictionaryData.map((item, idx) => (
+                  <div key={idx} style={{ background: "#F3F4F6", padding: 16, borderRadius: 12 }}>
+                    <h3 style={{ color: "#431407", margin: "0 0 8px 0", fontSize: 20, textTransform: "capitalize" }}>{item.word}</h3>
+                    <p style={{ color: "#4B5563", margin: 0, lineHeight: 1.5 }}>{item.definition}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       {/* ================= EDITOR ================= */}
 
       <motion.div
@@ -282,7 +438,7 @@ export default function SentencePanel({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(7,1fr)",
+          gridTemplateColumns: "repeat(9,1fr)",
           gap: 16,
         }}
       >
@@ -307,6 +463,31 @@ export default function SentencePanel({
             }
           }}
         />
+
+        <ActionButton
+          icon={<BookOpen size={20} />}
+          title="Meaning"
+          color="#8B5CF6"
+          onClick={async () => {
+            if (!sentence.trim()) return;
+            setShowDictionary(true);
+            setDictionaryData([]);
+            try {
+              const res = await fetch("http://127.0.0.1:8000/api/dictionary", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ raw_sentence: sentence }),
+              });
+              const data = await res.json();
+              if (data.definitions) {
+                setDictionaryData(data.definitions);
+              }
+            } catch (err) {
+              console.error("Failed to fetch definitions:", err);
+            }
+          }}
+        />
+
         <ActionButton
           icon={<Volume2 size={20} />}
           title="Speak"
@@ -371,6 +552,13 @@ speechSynthesis.speak(utterance);
           title="Map"
           color="#14B8A6"
           onClick={() => setShowMap(true)}
+        />
+
+        <ActionButton
+          icon={<LineChart size={20} />}
+          title="Metrics"
+          color="#F97316"
+          onClick={() => setShowMetrics(true)}
         />
       </div>
 
